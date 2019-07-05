@@ -9,7 +9,7 @@ const processData = (data) => {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
       if (parsedData.status === 'jackpotWin') {
-        postToTelegram(`${parsedData.player} just went for the ${jackpot} jackpot and won ${parsedData.paid}!!!! Congradulations ${parsedData.player}!`);
+        postToTelegram(`${parsedData.player} just went for the ${jackpot} jackpot and won ${parsedData.paid}!!!! Congratulations ${parsedData.player}!`);
       }
     }
     catch (e) {
