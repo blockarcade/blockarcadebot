@@ -13,7 +13,7 @@ const processData = (data) => {
       }
     }
     catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   });
 }
@@ -38,6 +38,7 @@ const waitForRequests = (callback) => {
 
   req.on('error', (error) => {
     console.error(error);
+    callback();
   });
 
   req.on('end', () => {
