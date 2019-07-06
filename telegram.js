@@ -4,7 +4,7 @@ const postToTelegram = (text) => {
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent('@blockarcade')}&text=${encodeURIComponent(text)}`,
+    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent('@blockarcade')}&text=${encodeURIComponent(text)}&parse_mode=markdown`,
     method: 'GET'
   }
 
