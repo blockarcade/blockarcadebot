@@ -33,7 +33,7 @@ const processData = (data) => {
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData);
       if (parsedData.status === 'jackpotWin') {
-        postToTelegram(`**${parsedData.player}** just went for the **${jackpot} jackpot** and won **${parsedData.paid}!!!!** Congratulations ${parsedData.player}!`);
+        postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
       }
     }
     catch (e) {
