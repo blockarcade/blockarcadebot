@@ -19,7 +19,7 @@ cron.schedule('30 * * * *', () => {
     }
 
     const body = JSON.parse(response);
-    postGifToTelegram('https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif', `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\nWho's going to win it?`);
+    postGifToTelegram('https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif', `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
   })
 });
 
