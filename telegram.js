@@ -21,4 +21,25 @@ const postToTelegram = (text) => {
   req.end();
 };
 
-module.exports = postToTelegram;
+const postGifToTelegram = (photo, caption) => {
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/${process.env.TELEGRAM_BOT}/sendAnimation?chat_id=${encodeURIComponent('@blockarcade')}&animation=${encodeURIComponent(photo)}&caption=${encodeURIComponent(caption)}&parse_mode=markdown`,
+    method: 'GET'
+  }
+
+  const req = https.request(options, (res) => {
+    res.on('data', (d) => {
+      process.stdout.write(d)
+    })
+  });
+
+  req.on('error', (error) => {
+    console.error(error)
+  });
+
+  req.end();
+};
+
+module.exports = { postToTelegram, postGifToTelegram };

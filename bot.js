@@ -1,5 +1,5 @@
 const https = require('https');
-const postToTelegram = require('./telegram');
+const { postToTelegram, postGifToTelegram } = require('./telegram');
 const iostRequest = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
@@ -10,7 +10,7 @@ const getDate = () => {
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
-cron.schedule('0 * * * *', () => {
+cron.schedule('30 * * * *', () => {
   console.log(getDate());
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
@@ -19,9 +19,7 @@ cron.schedule('0 * * * *', () => {
     }
 
     const body = JSON.parse(response);
-    postToTelegram(`🤑🤑🤑🤑 Major jackpot is up to ${body.balance} IOST! 🤑🤑🤑🤑
-![](https://media2.giphy.com/media/3o6gDWzmAzrpi5DQU8/giphy.gif?cid=790b76115d20c4a2444e325459959aa8&rid=giphy.gif)
-*Who's going to win it?*`);
+    postGifToTelegram('https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif', `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\nWho's going to win it?`);
   })
 });
 
