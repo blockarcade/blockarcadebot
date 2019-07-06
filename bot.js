@@ -1,6 +1,15 @@
 const https = require('https');
 const postToTelegram = require('./telegram');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
+const dateFormat = require('dateformat');
+
+setInterval(function() {
+	const now = new Date();
+	console.log(dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT"));
+}, 600000);
+
+const now = new Date();                      
+console.log(dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT"));                    
 
 const processData = (data) => {
   const lines = data.toString('utf8').split("\n");
@@ -8,7 +17,8 @@ const processData = (data) => {
     try {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
-      if (parsedData.status === 'jackpotWin') {
+      console.log(parsedData);
+	    if (parsedData.status === 'jackpotWin') {
         postToTelegram(`${parsedData.player} just went for the ${jackpot} jackpot and won ${parsedData.paid}!!!! Congratulations ${parsedData.player}!`);
       }
     }
@@ -32,6 +42,7 @@ const waitForRequests = (callback) => {
 
   const req = https.request(options, (res) => {
     res.on('data', (d) => {
+      console.log('got data');
       processData(d);
     })
   });
@@ -42,7 +53,9 @@ const waitForRequests = (callback) => {
   });
 
   req.on('end', () => {
-    callback();
+    console.log('closed');
+    setTimeout(waitForRequests, 0);
+
   });
 
   req.write(data);
@@ -50,4 +63,4 @@ const waitForRequests = (callback) => {
 }
 
 // Send waitForRequests as the callback causing a loop.
-waitForRequests(waitForRequests);
+waitForRequests();
