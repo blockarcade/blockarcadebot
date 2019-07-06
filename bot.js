@@ -10,7 +10,7 @@ const getDate = () => {
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
-cron.schedule('* * * * *', () => {
+cron.schedule('0 * * * *', () => {
   console.log(getDate());
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
