@@ -70,10 +70,7 @@ const processMessages = (data) => {
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
     try {
-      if (line.message.text === '/iost ') {
-        postToTelegram(`Please supply an IOST account name @${user}!`, line.message.message_id);
-        return;
-      }
+      console.log(line.message.text);
 
       if (line.message.entities[0].type === 'bot_command') {
         const [ command, args] = line.message.text.split(' ');
@@ -137,7 +134,7 @@ const waitForRequests = (callback) => {
   req.end();
 }
 const waitForBotMessage = () => {
-  console.log(getDate(), 'waiting for events');
+  console.log(getDate(), 'waiting for messages');
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
