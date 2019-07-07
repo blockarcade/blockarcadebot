@@ -7,6 +7,15 @@ const cron = require('node-cron');
 
 const reportedBets = new Map();
 
+const cashGifs = [
+  'https://media1.tenor.com/images/c8fc4c71fd9d5d1c6414da763bb5df51/tenor.gif',
+  'https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif',
+  'https://media1.tenor.com/images/42305eccf731de092494271770d6bd2d/tenor.gif',
+  'https://media1.tenor.com/images/841f559c023d0da26f3b3e046ad5c7df/tenor.gif',
+  'https://i.imgur.com/7OWL963.mp4',
+  'https://media1.tenor.com/images/50ff9c09c94440d3051bd5bf13f2a36d/tenor.gif',
+];
+
 const getDate = () => {
   const now = new Date();
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
@@ -21,7 +30,8 @@ cron.schedule('30 */2 * * *', () => {
     }
 
     const body = JSON.parse(response);
-    postGifToTelegram('https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif', `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+    const cashGif = cashGifs[Math.floor(Math.random()*cashGifs.length)];
+    postGifToTelegram(cashGif, `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
   })
 });
 
