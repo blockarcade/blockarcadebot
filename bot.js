@@ -32,8 +32,9 @@ const processData = (data) => {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData.status);
+      const jackpot = parsedData.amount > 10 ? 'major' : 'minor';
       if (parsedData.status === 'jackpotWin') {
-        postToTelegram(`*${parsedData.player}* just went for the *jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
+        postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
       }
     }
     catch (e) {
@@ -64,7 +65,7 @@ const waitForRequests = (callback) => {
 
     res.on('end', () => {
       console.log('closed');
-      processData(d);
+      processData(data);
       setTimeout(waitForRequests, 0);
     });
   });
