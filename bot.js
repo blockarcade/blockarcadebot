@@ -31,9 +31,9 @@ const processData = (data) => {
     try {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
-      console.log(parsedData);
+      console.log(parsedData.status);
       if (parsedData.status === 'jackpotWin') {
-        postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
+        postToTelegram(`*${parsedData.player}* just went for the *jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
       }
     }
     catch (e) {
@@ -43,6 +43,7 @@ const processData = (data) => {
 }
 
 const waitForRequests = (callback) => {
+  console.log(getDate(), 'waiting for events');
   const options = {
     hostname: 'api.iost.io',
     port: 443,
@@ -58,18 +59,17 @@ const waitForRequests = (callback) => {
     res.on('data', (d) => {
       console.log('got data');
       processData(d);
-    })
+    });
+
+    res.on('end', () => {
+      console.log('closed');
+      setTimeout(waitForRequests, 0);
+    });
   });
 
   req.on('error', (error) => {
     console.error(error);
     callback();
-  });
-
-  req.on('end', () => {
-    console.log('closed');
-    setTimeout(waitForRequests, 0);
-
   });
 
   req.write(data);
