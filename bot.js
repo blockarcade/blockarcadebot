@@ -56,13 +56,15 @@ const waitForRequests = (callback) => {
   };
 
   const req = https.request(options, (res) => {
+    let data = '';
     res.on('data', (d) => {
       console.log('got data');
-      processData(d);
+      data += d;
     });
 
     res.on('end', () => {
       console.log('closed');
+      processData(d);
       setTimeout(waitForRequests, 0);
     });
   });
