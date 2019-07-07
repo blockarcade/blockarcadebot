@@ -1,8 +1,7 @@
 const https = require('https');
 const room = '@blockarcade';
-// const room = '@bottestingba';
 
-const postToTelegram = (text, reply_to_message_id) => {
+const postToTelegram = (text, roomToPost = room, reply_to_message_id) => {
   let replyLine = '';
 
   if (typeof reply_to_message_id !== 'undefined') {
@@ -12,7 +11,7 @@ const postToTelegram = (text, reply_to_message_id) => {
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent(room)}&text=${encodeURIComponent(text)}&parse_mode=markdown${replyLine}`,
+    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent(roomToPost)}&text=${encodeURIComponent(text)}&parse_mode=markdown${replyLine}`,
     method: 'GET'
   }
 

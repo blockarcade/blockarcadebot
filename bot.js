@@ -35,7 +35,7 @@ cron.schedule('30 */6 * * *', () => {
     }
 
     const body = JSON.parse(response);
-    const cashGif = cashGifs[Math.floor(Math.random()*cashGifs.length)];
+    const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
     postGifToTelegram(cashGif, `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
   })
 });
@@ -69,28 +69,30 @@ const processMessages = (data) => {
   const changes = new Map();
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
+    const room = `@${line.message.chat.username}`;
     try {
-      console.log(line.message.text);
-
-      if (line.message.entities[0].type === 'bot_command') {
-        const [ command, args] = line.message.text.split(' ');
-
-        switch(command) {
-          case '/iost':
-            if (args) {
-              const user = line.message.from.username;
-              changes.set(user, { username: args, message_id: line.message.message_id });
-            }
-            break;
-          default:
-            console.log('unreconized command', command);
-        }
+      const [command, args] = line.message.text.split(' ');
+      switch (command) {
+        case '/iost':
+          if (args) {
+            const user = line.message.from.username;
+            changes.set(user, { username: args, message_id: line.message.message_id, room });
+          }
+          break;
+        default:
+          console.log('unreconized command', command);
       }
 
+
       changes.forEach((change, user) => {
-        postToTelegram(`Thanks @${user}! IOST account name set to *${change.username}*!`, change.message_id);
+        console.log(user, change);
+        postToTelegram(
+          `Thanks @${user}! IOST account name set to *${change.username}*!`,
+          changes.room,
+          change.message_id,
+        );
         userdb.put(user, { iostAccount: change.username });
-      });      
+      });
     }
     catch (e) {
       // console.log(e);
@@ -138,7 +140,7 @@ const waitForBotMessage = () => {
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/getUpdates?offset=${lastMessageId+1}`,
+    path: `/${process.env.TELEGRAM_BOT}/getUpdates?offset=${lastMessageId + 1}`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
