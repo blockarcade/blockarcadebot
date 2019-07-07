@@ -5,6 +5,8 @@ const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contr
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
 
+const reportedBets = new Map();
+
 const getDate = () => {
   const now = new Date();
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
@@ -34,7 +36,11 @@ const processData = (data) => {
       console.log(parsedData.status);
       const jackpot = parsedData.amount > 10 ? 'major' : 'minor';
       if (parsedData.status === 'jackpotWin') {
-        postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
+        // Prevent double reporting.
+        if (!reportedBets.has(parsedData.paid)) {
+          reportedBets.set(parsedData.paid, true);
+          postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
+        }
       }
     }
     catch (e) {
