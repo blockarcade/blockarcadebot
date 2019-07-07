@@ -4,6 +4,9 @@ const iostRequest = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
+const level = require('level');
+
+const userdb = level('userdb');
 
 const reportedBets = new Map();
 
@@ -16,12 +19,14 @@ const cashGifs = [
   'https://media1.tenor.com/images/50ff9c09c94440d3051bd5bf13f2a36d/tenor.gif',
 ];
 
+let lastMessageId = 0;
+
 const getDate = () => {
   const now = new Date();
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
-cron.schedule('30 */2 * * *', () => {
+cron.schedule('30 */6 * * *', () => {
   console.log(getDate());
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
@@ -59,6 +64,43 @@ const processData = (data) => {
   });
 }
 
+const processMessages = (data) => {
+  const lines = JSON.parse(data.toString('utf8'));
+  const changes = new Map();
+  lines.result.forEach(line => {
+    lastMessageId = line.update_id;
+    try {
+      if (line.message.text === '/iost ') {
+        postToTelegram(`Please supply an IOST account name @${user}!`, line.message.message_id);
+        return;
+      }
+
+      if (line.message.entities[0].type === 'bot_command') {
+        const [ command, args] = line.message.text.split(' ');
+
+        switch(command) {
+          case '/iost':
+            if (args) {
+              const user = line.message.from.username;
+              changes.set(user, { username: args, message_id: line.message.message_id });
+            }
+            break;
+          default:
+            console.log('unreconized command', command);
+        }
+      }
+
+      changes.forEach((change, user) => {
+        postToTelegram(`Thanks @${user}! IOST account name set to *${change.username}*!`, change.message_id);
+        userdb.put(user, { iostAccount: change.username });
+      });      
+    }
+    catch (e) {
+      // console.log(e);
+    }
+  });
+};
+
 const waitForRequests = (callback) => {
   console.log(getDate(), 'waiting for events');
   const options = {
@@ -94,6 +136,42 @@ const waitForRequests = (callback) => {
   req.write(data);
   req.end();
 }
+const waitForBotMessage = () => {
+  console.log(getDate(), 'waiting for events');
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/${process.env.TELEGRAM_BOT}/getUpdates?offset=${lastMessageId+1}`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+    },
+  };
+
+  const req = https.request(options, (res) => {
+    let data = '';
+    res.on('data', (d) => {
+      console.log('got data');
+      data += d;
+    });
+
+    res.on('end', () => {
+      console.log('closed');
+      processMessages(data);
+      setTimeout(waitForBotMessage, 0);
+    });
+  });
+
+  req.on('error', (error) => {
+    console.error(error);
+    callback();
+  });
+
+  req.write(data);
+  req.end();
+}
 
 // Send waitForRequests as the callback causing a loop.
-waitForRequests();
+// waitForRequests();
+waitForBotMessage();

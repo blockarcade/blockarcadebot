@@ -18,6 +18,7 @@
   "homepage": "https://github.com/blockarcade/blockarcadebot#readme",
   "dependencies": {
     "dateformat": "^3.0.3",
+    "level": "^5.0.1",
     "node-cron": "^2.0.3"
   }
 }

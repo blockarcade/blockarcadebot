@@ -1,10 +1,18 @@
 const https = require('https');
+const room = '@blockarcade';
+// const room = '@bottestingba';
 
-const postToTelegram = (text) => {
+const postToTelegram = (text, reply_to_message_id) => {
+  let replyLine = '';
+
+  if (typeof reply_to_message_id !== 'undefined') {
+    replyLine = `&reply_to_message_id=${reply_to_message_id}`;
+  }
+
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent('@blockarcade')}&text=${encodeURIComponent(text)}&parse_mode=markdown`,
+    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent(room)}&text=${encodeURIComponent(text)}&parse_mode=markdown${replyLine}`,
     method: 'GET'
   }
 
@@ -25,7 +33,7 @@ const postGifToTelegram = (photo, caption) => {
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/sendAnimation?chat_id=${encodeURIComponent('@blockarcade')}&animation=${encodeURIComponent(photo)}&caption=${encodeURIComponent(caption)}&parse_mode=markdown`,
+    path: `/${process.env.TELEGRAM_BOT}/sendAnimation?chat_id=${encodeURIComponent(room)}&animation=${encodeURIComponent(photo)}&caption=${encodeURIComponent(caption)}&parse_mode=markdown`,
     method: 'GET'
   }
 
