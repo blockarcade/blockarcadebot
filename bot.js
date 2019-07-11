@@ -26,7 +26,7 @@ const getDate = () => {
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 }
 
-cron.schedule('30 */6 * * *', () => {
+cron.schedule('30 */12 * * *', () => {
   console.log(getDate());
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
@@ -87,8 +87,9 @@ const processMessages = (data) => {
       changes.forEach((change, user) => {
         console.log(user, change);
         postToTelegram(
-          `Thanks @${user}! IOST account name set to *${change.username}*!`,
+          `Thanks @${user}! IOST account name set to ${change.username}!`,
           changes.room,
+          false,
           change.message_id,
         );
         userdb.put(user, { iostAccount: change.username });
