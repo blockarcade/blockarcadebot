@@ -124,7 +124,7 @@ const waitForRequests = (callback) => {
     res.on('end', () => {
       console.log('closed');
       processData(data);
-      setTimeout(waitForRequests, 0);
+      setTimeout(waitForRequests, 1000);
     });
   });
 
@@ -159,7 +159,7 @@ const waitForBotMessage = () => {
     res.on('end', () => {
       console.log('closed');
       processMessages(data);
-      setTimeout(waitForBotMessage, 0);
+      setTimeout(waitForBotMessage, 1000);
     });
   });
 
@@ -173,5 +173,5 @@ const waitForBotMessage = () => {
 }
 
 // Send waitForRequests as the callback causing a loop.
-// waitForRequests();
+waitForRequests();
 waitForBotMessage();
