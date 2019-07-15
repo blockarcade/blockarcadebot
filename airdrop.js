@@ -14,26 +14,32 @@ userdb.put('saifsolo', JSON.stringify({iostUsername: 'noypi'}))
 userdb.put('butt47jk ', JSON.stringify({iostUsername: 'noypi'}))
 userdb.put('ShnealKonspiracyKamp ', JSON.stringify({iostUsername: 'shneal'}))
 userdb.put('jmntn619 ', JSON.stringify({iostUsername: 'jmntn619'}))
+userdb.put('octalmage ', JSON.stringify({iostUsername: 'octalmage'}))
 
 
+postToTelegram(`AIRDROPPED 1000 TIX to @Not_traceable!!!!`, undefined, false);
 const airdropAmount = 1000;
 
-userdb.createReadStream()
-  .on('data', function (data) {
-    const username = `@${data.key}`;
-    const user = JSON.parse(data.value);
-    console.log(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`)
-    // exec(``,{stdio: 'inherit'})
-    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${username}!!!!`);
-  })
-  .on('error', function (err) {
-    console.log('Oh my!', err)
-  })
-  .on('close', function () {
-    console.log('Stream closed')
-  })
-  .on('end', function () {
-    console.log('Stream ended')
-  });
+// userdb.createReadStream()
+//   .on('data', function (data) {
+//     const username = `@${data.key}`;
+//     const user = JSON.parse(data.value);
+//     if (user.iostUsername === 'octalmage') {
+//       return;
+//     }
+
+//     console.log(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`)
+//     // exec(``,{stdio: 'inherit'})
+//     postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${username}!!!!`);
+//   })
+//   .on('error', function (err) {
+//     console.log('Oh my!', err)
+//   })
+//   .on('close', function () {
+//     console.log('Stream closed')
+//   })
+//   .on('end', function () {
+//     console.log('Stream ended')
+//   });
 
 
