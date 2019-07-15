@@ -92,7 +92,7 @@ const processMessages = (data) => {
           false,
           change.message_id,
         );
-        userdb.put(user, { iostAccount: change.username });
+        userdb.put(user, JSON.stringify({ iostAccount: change.username }));
       });
     }
     catch (e) {
