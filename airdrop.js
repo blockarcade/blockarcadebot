@@ -9,15 +9,6 @@ const exec = require('child_process').execSync;
 
 const userdb = level('userdb');
 
-userdb.put('Not_traceable', JSON.stringify({iostUsername: 'mi_amor'}))
-userdb.put('saifsolo', JSON.stringify({iostUsername: 'noypi'}))
-userdb.put('butt47jk ', JSON.stringify({iostUsername: 'noypi'}))
-userdb.put('ShnealKonspiracyKamp ', JSON.stringify({iostUsername: 'shneal'}))
-userdb.put('jmntn619 ', JSON.stringify({iostUsername: 'jmntn619'}))
-userdb.put('octalmage ', JSON.stringify({iostUsername: 'octalmage'}))
-
-
-postToTelegram(`AIRDROPPED 1000 TIX to @Not_traceable!!!!`, undefined, false);
 const airdropAmount = 1000;
 
 // userdb.createReadStream()
