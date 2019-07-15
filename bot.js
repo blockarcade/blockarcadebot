@@ -69,8 +69,8 @@ const processMessages = (data) => {
   const changes = new Map();
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
-    const room = `@${line.message.chat.username}`;
     try {
+      const room = `@${line.message.chat.username}`;
       const [command, args] = line.message.text.split(' ');
       switch (command) {
         case '/iost':
