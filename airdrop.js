@@ -23,7 +23,7 @@ userdb.createReadStream()
       console.log(e);
     }
 
-    if (user.iostUsername === 'octalmage') {
+    if (typeof user.iostUsername !== 'undefined' || user.iostUsername === 'octalmage') {
       return;
     }
 
