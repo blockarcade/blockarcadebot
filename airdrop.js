@@ -46,13 +46,13 @@ userdb.createReadStream()
 
     try {
       key.forEach((user) => {
-        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${airdropped[user]}", "${airdropAmount}", "AIRDROP Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
+        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${airdropped[user]}", "${dropAmount}", "AIRDROP Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
       });
    } catch (e) {
      console.log(e);
    } 
 
-    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${keys.join(', ')}!!!!`);
+    postToTelegram(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`);
   });
 
 
