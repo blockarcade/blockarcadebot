@@ -9,28 +9,28 @@ const exec = require('child_process').execSync;
 
 const userdb = level('userdb');
 
-const airdropAmount = 1000;
-
-// userdb.createReadStream()
-//   .on('data', function (data) {
-//     const username = `@${data.key}`;
-//     const user = JSON.parse(data.value);
-//     if (user.iostUsername === 'octalmage') {
-//       return;
-//     }
-
-//     console.log(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`)
-//     // exec(``,{stdio: 'inherit'})
-//     postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${username}!!!!`);
-//   })
-//   .on('error', function (err) {
-//     console.log('Oh my!', err)
-//   })
-//   .on('close', function () {
-//     console.log('Stream closed')
-//   })
-//   .on('end', function () {
-//     console.log('Stream ended')
-//   });
+const airdropAmount = 10;
+const airdropped = [];
+userdb.createReadStream()
+  .on('data', function (data) {
+    const username = `@${data.key.trim()}`;
+    const user = JSON.parse(data.value);
+    if (user.iostUsername === 'octalmage') {
+      return;
+    }
+    airdropped.push(username);
+    console.log(`Airdropping to ${$username}!`);
+    exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]`,{stdio: 'inherit'})
+  })
+  .on('error', function (err) {
+    console.log('Oh my!', err)
+  })
+  .on('close', function () {
+    console.log('Stream closed')
+  })
+  .on('end', function () {
+    console.log('Stream ended')
+    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${airdropped.join(', ')}!!!!`);
+  });
 
 
