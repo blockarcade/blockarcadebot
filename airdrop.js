@@ -28,12 +28,7 @@ userdb.createReadStream()
     }
 
     if (user.iostUsername) {
-      airdropped.set(username, true);
-      try {
-        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP\!\!\!\! Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
-      } catch(e) {
-        console.log(e);
-      }
+      airdropped.set(username, user.iostUsername);
     }
   })
   .on('error', function (err) {
@@ -46,7 +41,17 @@ userdb.createReadStream()
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
     console.log(airdropped);
+
     const dropAmount = airdropAmount / airdropped.size;
+
+    try {
+      key.forEach((user) => {
+        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${airdropped[user]}", "${airdropAmount}", "AIRDROP Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
+      });
+   } catch (e) {
+     console.log(e);
+   } 
+
     postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${keys.join(', ')}!!!!`);
   });
 
