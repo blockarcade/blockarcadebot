@@ -19,7 +19,7 @@ userdb.createReadStream()
       return;
     }
     airdropped.push(username);
-    console.log(`Airdropping to ${$username}!`);
+    console.log(`Airdropping to ${username}!`);
     exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]`,{stdio: 'inherit'})
   })
   .on('error', function (err) {
