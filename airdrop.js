@@ -13,9 +13,11 @@ const airdropAmount = 10;
 const airdropped = [];
 userdb.createReadStream()
   .on('data', function (data) {
-    const username = `@${data.key.trim()}`;
+    let username
+    console.log(data);
     let user;
     try {
+      username = `@${data.key.trim()}`;;
       user = JSON.parse(data.value);
     } catch (e) {
       console.log(e);
@@ -28,7 +30,7 @@ userdb.createReadStream()
     if (user.iostUsername) {
       airdropped.push(username);
       try {
-        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
+        // exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP\!\!\!\! Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
       } catch(e) {
         console.log(e);
       }
@@ -42,7 +44,7 @@ userdb.createReadStream()
   })
   .on('end', function () {
     console.log('Stream ended')
-    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${airdropped.join(', ')}!!!!`);
+    // postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${airdropped.join(', ')}!!!!`);
   });
 
 
