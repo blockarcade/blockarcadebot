@@ -15,7 +15,7 @@ userdb.createReadStream()
   .on('data', function (data) {
     let username
     console.log(data);
-    let user;
+    let user = {};
     try {
       username = `@${data.key.trim()}`;;
       user = JSON.parse(data.value);
