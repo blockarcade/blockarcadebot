@@ -14,7 +14,13 @@ const airdropped = [];
 userdb.createReadStream()
   .on('data', function (data) {
     const username = `@${data.key.trim()}`;
-    const user = JSON.parse(data.value);
+    let user;
+    try {
+      user = JSON.parse(data.value);
+    } catch (e) {
+      console.log(e);
+    }
+
     if (user.iostUsername === 'octalmage') {
       return;
     }
