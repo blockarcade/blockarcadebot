@@ -48,7 +48,7 @@ userdb.createReadStream()
     console.log(airdropped);
     const dropAmount = airdropAmount / airdropped.size;
     console.log(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`)
-    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${airdropped.join(', ')}!!!!`);
+    postToTelegram(`AIRDROPPED ${airdropAmount} TIX to ${airdropped.keys().join(', ')}!!!!`);
   });
 
 
