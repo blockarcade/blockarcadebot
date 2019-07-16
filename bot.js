@@ -21,13 +21,7 @@ const cashGifs = [
 
 let lastMessageId = 0;
 
-const getDate = () => {
-  const now = new Date();
-  return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
-}
-
-cron.schedule('30 */12 * * *', () => {
-  console.log(getDate());
+const postJackpotToTelegram = () => {
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
       console.log(err);
@@ -37,7 +31,17 @@ cron.schedule('30 */12 * * *', () => {
     const body = JSON.parse(response);
     const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
     postGifToTelegram(cashGif, `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
-  })
+  });
+};
+
+const getDate = () => {
+  const now = new Date();
+  return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+}
+
+cron.schedule('30 */12 * * *', () => {
+  console.log(getDate());
+  postJackpotToTelegram();
 });
 
 console.log(getDate());
@@ -79,6 +83,9 @@ const processMessages = (data) => {
             changes.set(user, { username: args, message_id: line.message.message_id, room });
           }
           break;
+        case '/jackpot':
+            postJackpotToTelegram();
+            break;
         default:
           console.log('unreconized command', command);
       }
