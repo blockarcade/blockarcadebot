@@ -18,9 +18,15 @@ userdb.createReadStream()
     if (user.iostUsername === 'octalmage') {
       return;
     }
-    airdropped.push(username);
-    console.log(`Airdropping to ${username}!`);
-    exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]`,{stdio: 'inherit'})
+
+    if (user.iostUsername) {
+      airdropped.push(username);
+      try {
+        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${user.iostUsername}", "${airdropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
+      } catch(e) {
+        console.log(e);
+      }
+    }
   })
   .on('error', function (err) {
     console.log('Oh my!', err)
