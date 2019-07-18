@@ -1,6 +1,6 @@
 const https = require('https');
 const { postToTelegram, postGifToTelegram } = require('./telegram');
-const iostRequest = require('./iost');
+const { iostRequest, iostABCRequest } = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
@@ -31,6 +31,24 @@ const postJackpotToTelegram = () => {
     const body = JSON.parse(response);
     const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
     postGifToTelegram(cashGif, `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} IOST!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+  });
+};
+
+const postVotesToTelegram = () => {
+  iostABCRequest('/api/voters/blockarcade', (err, response) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    const body = JSON.parse(response);
+    const totalVotes = body.voters.reduce((acc, vote) => {
+      return acc + vote.votes;
+    }, 0);
+
+    const amountLeft = 8000000 - totalVotes;
+
+    postToTelegram(`*BlockArcade's IOST node is up to ${totalVotes.toFixed(0)} votes!*\n\nOnly ${amountLeft.toFixed(0)} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
   });
 };
 
@@ -71,11 +89,15 @@ const processData = (data) => {
 const processMessages = (data) => {
   const lines = JSON.parse(data.toString('utf8'));
   const changes = new Map();
+  if (!lines.result) {
+    return;
+  }
+
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
     try {
       const room = `@${line.message.chat.username}`;
-      const [command, args] = line.message.text.split(' ');
+      const [command, args] = line.message.text.replace('@BlockArcadeBot', '').split(' ');
       switch (command) {
         case '/iost':
           if (args) {
@@ -85,6 +107,9 @@ const processMessages = (data) => {
           break;
         case '/jackpot':
             postJackpotToTelegram();
+            break;
+        case '/vote':
+            postVotesToTelegram();
             break;
         default:
           console.log('unreconized command', command);
@@ -143,6 +168,7 @@ const waitForRequests = (callback) => {
   req.write(data);
   req.end();
 }
+
 const waitForBotMessage = () => {
   console.log(getDate(), 'waiting for messages');
   const options = {
