@@ -48,7 +48,7 @@ const postVotesToTelegram = () => {
 
     const amountLeft = 8000000 - totalVotes;
 
-    postToTelegram(`*BlockArcade's IOST node is up to ${totalVotes.toFixed(0)} votes!*\n\nOnly ${amountLeft.toFixed(0)} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
+    postToTelegram(`*BlockArcade's IOST node is up to ${totalVotes.toFixed(0).toLocaleString()} votes!*\n\nOnly ${amountLeft.toFixed(0).toLocaleString()} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
   });
 };
 
