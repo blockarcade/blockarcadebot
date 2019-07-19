@@ -36,3 +36,11 @@ source ./config.sh
 
 Now you're ready to run the bot!
 
+```
+node bot.js
+```
+
+## Structure
+
+* `bot.js` is the main file, this is where you will add your commands.
+* `telegram.js` is where the default Telegram room is set.
