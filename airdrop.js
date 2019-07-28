@@ -9,11 +9,11 @@ const exec = require('child_process').execSync;
 
 const userdb = level('userdb');
 
-const airdropAmount = 100;
+const airdropAmount = 10000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
-    let username
+    let username;
     let user = {};
     try {
       username = `@${data.key.trim()}`;;
@@ -22,13 +22,15 @@ userdb.createReadStream()
       console.log(e);
     }
 
-    if (typeof user.iostUsername === 'undefined' || username === '@octalmage') {
-      console.log('Skipping user:', user.iostUsername);
+    if (typeof user.iostAccount === 'undefined' || username === '@octalmage') {
+      console.log('Skipping user:', user.iostAccount);
       return;
     }
 
-    if (user.iostUsername) {
-      airdropped.set(username, user.iostUsername);
+    if (user.iostAccount) {
+      airdropped.set(username, user.iostAccount);
+    } else {
+      console.log('no username', data);
     }
   })
   .on('error', function (err) {
@@ -37,22 +39,24 @@ userdb.createReadStream()
   .on('close', function () {
     console.log('Stream closed')
   })
-  .on('end', function () {
+  .on('end', () => {
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
     console.log(airdropped);
 
-    const dropAmount = airdropAmount / airdropped.size;
+    const dropAmount = Math.floor(airdropAmount / airdropped.size);
 
     try {
-      key.forEach((user) => {
-        exec(`iwallet --account blockarcade call token.iost transfer '["tix","blockarcade", "${airdropped[user]}", "${dropAmount}", "AIRDROP Play now at https://blockarca.de!"]`,{stdio: 'inherit'});
+      keys.forEach(async (user) => {
+        // console.log('user', user);
+        // console.log('key', airdropped.get(user));
+        exec(`iwallet --account blockarcade -s 18.209.137.246:30002 call token.iost transfer '["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`,{stdio: 'inherit'});
       });
    } catch (e) {
      console.log(e);
    } 
-
-    postToTelegram(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`);
+  //  console.log(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`);
+    postToTelegram(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`, undefined, false);
   });
 
 
