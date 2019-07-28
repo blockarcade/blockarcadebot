@@ -85,7 +85,7 @@ const processData = (data) => {
         // Prevent double reporting.
         if (!reportedBets.has(parsedData.paid)) {
           reportedBets.set(parsedData.paid, true);
-          postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${parsedData.paid}!!!!*\n\nCongratulations ${parsedData.player}!`);
+          postToTelegram(`*${parsedData.player}* just went for the *${jackpot} jackpot* and won *${JSON.parse(parsedData.paid).join(' and ')}!!!!*\n\nCongratulations ${parsedData.player}!`);
         }
       }
     }
