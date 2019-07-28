@@ -38,7 +38,7 @@ const postJackpotToTelegram = () => {
       }
       const body = JSON.parse(response);
       const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
-      postGifToTelegram(cashGif, `*Major jackpot is up to ${(body.balance / 10).toFixed(2)} ITRX and ${(iostBalance / 10).toFixed(2)}!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+      postGifToTelegram(cashGif, `*Major jackpot is up to ${(iostBalance / 10).toFixed(2)} IOST and ${(body.balance / 10).toFixed(2)} ITRX!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
     });
   });
 };
