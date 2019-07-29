@@ -37,8 +37,17 @@ const postJackpotToTelegram = () => {
         return;
       }
       const body = JSON.parse(response);
-      const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
-      postGifToTelegram(cashGif, `*Major jackpot is up to ${(iostBalance / 10).toFixed(2)} IOST and ${(body.balance / 10).toFixed(2)} ITRX!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+      const itrxBalance = body.balance;
+
+      iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/tix/true', (err, response) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
+        postGifToTelegram(cashGif, `*Major jackpot is up to ${(iostBalance / 10).toFixed(2)} IOST, ${(itrxBalance/ 10).toFixed(2)} ITRX, and ${(body.balance / 10).toFixed(2)} TIX!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+      });
     });
   });
 };
