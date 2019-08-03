@@ -69,9 +69,18 @@ const postVotesToTelegram = () => {
   });
 };
 
-const postInstructionsToTelegram = () => {
-  postToTelegram('*Welcome!* Tell the bot your IOST account name using "/iost accountname" to participate in airdrops!');
-  postToTelegram('/iost blockarcade');
+const postInstructionsToTelegram = (user) => {
+  let teleUser = '';
+  if (user) {
+    teleUser = ` @${user}`;;
+  }
+
+  postToTelegram(`Welcome${teleUser}! Tell the bot your IOST account name using "/iost accountname" to participate in airdrops!`, undefined, false);
+
+  setTimeout(() => {
+    postToTelegram('/iost YOUR IOST ACCOUNT');
+  }, 1000);
+  
 }
 
 const getDate = () => {
@@ -117,6 +126,13 @@ const processMessages = (data) => {
 
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
+
+    if (typeof line.message.new_chat_members !== 'undefined') {
+      console.log(line.message.new_chat_members);
+      postInstructionsToTelegram(line.message.new_chat_members[0].username);
+      return;
+    }
+
     try {
       const room = `@${line.message.chat.username}`;
       const [command, args] = line.message.text.replace('@BlockArcadeBot', '').split(' ');

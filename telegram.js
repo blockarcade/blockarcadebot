@@ -1,9 +1,15 @@
 const https = require('https');
-const room = '@blockarcade';
+const room = '@bottestingba';
 
 const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_message_id) => {
   let replyLine = '';
   let markdownLine = '';
+
+  // https://stackoverflow.com/a/49924429
+  text = text.replace("_", "\\_")
+    .replace("*", "\\*")
+    .replace("[", "\\[")
+    .replace("`", "\\`");
 
   if (typeof reply_to_message_id !== 'undefined') {
     replyLine = `&reply_to_message_id=${reply_to_message_id}`;
