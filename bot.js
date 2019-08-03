@@ -44,9 +44,8 @@ const postJackpotToTelegram = () => {
           console.log(err);
           return;
         }
-
         const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
-        postGifToTelegram(cashGif, `*Major jackpot is up to ${(iostBalance / 10).toFixed(2)} IOST, ${(itrxBalance/ 10).toFixed(2)} ITRX, and ${(body.balance / 10).toFixed(2)} TIX!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+        postGifToTelegram(cashGif, `*Major jackpot is up to ${numberWithCommas((iostBalance / 10).toFixed(2))} IOST, ${numberWithCommas((itrxBalance/ 10).toFixed(2))} ITRX, and ${numberWithCommas((body.balance / 10).toFixed(2))} TIX!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
       });
     });
   });
@@ -65,8 +64,8 @@ const postVotesToTelegram = () => {
     }, 0);
 
     const amountLeft = 8000000 - totalVotes;
-
-    postToTelegram(`*BlockArcade's IOST node is up to ${totalVotes.toFixed(0).toLocaleString()} votes!*\n\nOnly ${amountLeft.toFixed(0).toLocaleString()} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
+    
+    postToTelegram('https://media.giphy.com/media/3SLnytgfJTaxy/giphy.gif', `*BlockArcade's IOST node is up to ${numberWithCommas(totalVotes.toFixed(0))} votes!*\n\nOnly ${numberWithCommas(amountLeft.toFixed(0).toLocaleString())} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
   });
 };
 
@@ -226,3 +225,8 @@ const waitForBotMessage = () => {
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
 waitForBotMessage();
+
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
