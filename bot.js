@@ -65,7 +65,7 @@ const postVotesToTelegram = () => {
 
     const amountLeft = 8000000 - totalVotes;
     
-    postToTelegram('https://media.giphy.com/media/3SLnytgfJTaxy/giphy.gif', `*BlockArcade's IOST node is up to ${numberWithCommas(totalVotes.toFixed(0))} votes!*\n\nOnly ${numberWithCommas(amountLeft.toFixed(0).toLocaleString())} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
+    postGifToTelegram('https://media.giphy.com/media/3SLnytgfJTaxy/giphy.gif', `*BlockArcade's IOST node is up to ${numberWithCommas(totalVotes.toFixed(0))} votes!*\n\nOnly ${numberWithCommas(amountLeft.toFixed(0).toLocaleString())} votes left!\n\nVote now at: https://iostabc.com/account/blockarcade`);
   });
 };
 
