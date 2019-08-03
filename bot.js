@@ -69,6 +69,11 @@ const postVotesToTelegram = () => {
   });
 };
 
+const postInstructionsToTelegram = () => {
+  postToTelegram('*Welcome!* Tell the bot your IOST account name using "/iost accountname" to participate in airdrops!');
+  postToTelegram('/iost blockarcade');
+}
+
 const getDate = () => {
   const now = new Date();
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
@@ -124,6 +129,9 @@ const processMessages = (data) => {
           break;
         case '/jackpot':
             postJackpotToTelegram();
+            break;
+        case '/airdrop':
+            postInstructionsToTelegram();
             break;
         case '/vote':
             postVotesToTelegram();
