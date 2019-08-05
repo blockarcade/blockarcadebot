@@ -56,7 +56,7 @@ userdb.createReadStream()
      console.log(e);
    } 
   //  console.log(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`);
-    postToTelegram(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`, undefined, false);
+    postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${keys.join(', ')}!!!!`, undefined, false);
   });
 
 
