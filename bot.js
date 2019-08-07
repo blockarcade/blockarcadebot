@@ -141,7 +141,7 @@ const processMessages = (data) => {
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
 
-    if (typeof line.message.new_chat_members !== 'undefined') {
+    if (line.message && typeof line.message.new_chat_members !== 'undefined') {
       console.log(line.message.new_chat_members);
       postInstructionsToTelegram(line.message.new_chat_members[0].username);
       return;
