@@ -5,11 +5,12 @@ const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contr
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
 const level = require('level');
-const exec = require('child_process').execSync;
+const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 
 const userdb = level('userdb');
 
-const airdropAmount = 10000;
+const airdropAmount = 5000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
@@ -51,6 +52,7 @@ userdb.createReadStream()
         // console.log('user', user);
         // console.log('key', airdropped.get(user));
         exec(`iwallet --account blockarcade -s 18.209.137.246:30002 call token.iost transfer '["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`,{stdio: 'inherit'});
+        execSync('sleep 1');
       });
    } catch (e) {
      console.log(e);
