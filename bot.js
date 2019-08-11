@@ -219,7 +219,7 @@ const processMessages = (data) => {
       changes.forEach((change, user) => {
         console.log(user, change);
         postToTelegram(
-          `Thanks for signing up @${user}! (we deleted your message)`,
+          `Thanks for signing up @${user}! Your IOST account is registered and we deleted your message.`,
           changes.room,
           false,
         );
