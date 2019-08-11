@@ -21,6 +21,46 @@ const cashGifs = [
 
 let lastMessageId = 0;
 
+
+const postRegisteredUsers = () => {
+  const airdropped = new Map();
+  userdb.createReadStream()
+  .on('data', function (data) {
+    let username;
+    let user = {};
+    try {
+      username = `@${data.key.trim()}`;;
+      user = JSON.parse(data.value);
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (typeof user.iostAccount === 'undefined' || username === '@octalmage') {
+      console.log('Skipping user:', user.iostAccount);
+      return;
+    }
+
+    if (user.iostAccount) {
+      airdropped.set(username, user.iostAccount);
+    } else {
+      console.log('no username', data);
+    }
+  })
+  .on('error', function (err) {
+    console.log('Oh my!', err)
+  })
+  .on('close', function () {
+    console.log('Stream closed')
+  })
+  .on('end', () => {
+    console.log('Stream ended')
+    const keys = Array.from( airdropped.keys() );
+    console.log(airdropped);
+
+    postToTelegram(`💰💰 There are *${airdropped.length}* $IOST accounts registed for the next AIRDROP! 💰💰`, undefined, true);
+});
+};
+
 const postJackpotToTelegram = () => {
   iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true', (err, response) => {
     if (err) {
@@ -167,6 +207,9 @@ const processMessages = (data) => {
             break;
         case '/vote':
             postVotesToTelegram();
+            break;
+        case '/count':
+            postRegisteredUsers();
             break;
         default:
           console.log('unreconized command', command);
