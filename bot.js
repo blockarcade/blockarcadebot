@@ -179,7 +179,6 @@ const processMessages = (data) => {
           `Thanks for signing up @${user}! (we deleted your message)`,
           changes.room,
           false,
-          change.message_id,
         );
         userdb.put(user, JSON.stringify({ iostAccount: change.username }));
       });
