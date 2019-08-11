@@ -199,8 +199,11 @@ const processMessages = (data) => {
         case '/iost':
           const user = line.message.from.username;
           if (args) {
-           
-            changes.set(user, { username: args, message_id: line.message.message_id, room });
+            if (!user) {
+              postToTelegram('Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one');
+            } else {
+              changes.set(user, { username: args, message_id: line.message.message_id, room });
+            }
 
             deleteMessage('@blockarcade', line.message.message_id);
           } else {
