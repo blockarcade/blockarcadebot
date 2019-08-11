@@ -192,8 +192,9 @@ const processMessages = (data) => {
       const [command, args] = line.message.text.replace('@BlockArcadeBot', '').split(' ');
       switch (command) {
         case '/iost':
+          const user = line.message.from.username;
           if (args) {
-            const user = line.message.from.username;
+           
             changes.set(user, { username: args, message_id: line.message.message_id, room });
 
             deleteMessage('@blockarcade', line.message.message_id);
