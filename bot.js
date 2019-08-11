@@ -57,7 +57,7 @@ const postRegisteredUsers = () => {
     const keys = Array.from( airdropped.keys() );
     console.log(airdropped);
 
-    postToTelegram(`💰💰 There are *${keys.length}* $IOST accounts registed for the next AIRDROP! 💰💰`, undefined, true);
+    postToTelegram(`💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 💰💰`, undefined, true);
 });
 };
 
