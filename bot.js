@@ -131,9 +131,9 @@ const postInstructionsToTelegram = (user) => {
 
   postToTelegram(`Welcome${teleUser}! Tell the bot your IOST account name using "/iost accountname" to participate in airdrops!`, undefined, false);
 
-  setTimeout(() => {
-    postToTelegram('/iost YOUR IOST ACCOUNT');
-  }, 1000);
+  // setTimeout(() => {
+  //   postToTelegram('/iost YOUR IOST ACCOUNT');
+  // }, 1000);
   
 }
 
@@ -197,19 +197,26 @@ const processMessages = (data) => {
             changes.set(user, { username: args, message_id: line.message.message_id, room });
 
             deleteMessage('@blockarcade', line.message.message_id);
+          } else {
+            postInstructionsToTelegram(user);
+            deleteMessage('@blockarcade', line.message.message_id);
           }
           break;
         case '/jackpot':
             postJackpotToTelegram();
+            deleteMessage('@blockarcade', line.message.message_id);
             break;
         case '/airdrop':
             postInstructionsToTelegram();
+            deleteMessage('@blockarcade', line.message.message_id);
             break;
         case '/vote':
             postVotesToTelegram();
+            deleteMessage('@blockarcade', line.message.message_id);
             break;
         case '/count':
             postRegisteredUsers();
+            deleteMessage('@blockarcade', line.message.message_id);
             break;
         default:
           console.log('unreconized command', command);
