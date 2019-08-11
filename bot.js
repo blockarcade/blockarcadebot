@@ -1,5 +1,5 @@
 const https = require('https');
-const { postToTelegram, postGifToTelegram } = require('./telegram');
+const { postToTelegram, postGifToTelegram, deleteMessage } = require('./telegram');
 const { iostRequest, iostABCRequest } = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
@@ -155,6 +155,8 @@ const processMessages = (data) => {
           if (args) {
             const user = line.message.from.username;
             changes.set(user, { username: args, message_id: line.message.message_id, room });
+
+            deleteMessage('@blockarcade', line.message.message_id);
           }
           break;
         case '/jackpot':
@@ -174,7 +176,7 @@ const processMessages = (data) => {
       changes.forEach((change, user) => {
         console.log(user, change);
         postToTelegram(
-          `Thanks @${user}! IOST account name set to ${change.username}!`,
+          `Thanks for signing up @${user}! (we deleted your message)`,
           changes.room,
           false,
           change.message_id,

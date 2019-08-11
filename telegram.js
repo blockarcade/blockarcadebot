@@ -1,6 +1,48 @@
 const https = require('https');
 const room = '@blockarcade';
 
+const editMessage = (messageId, text) => {
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/${process.env.TELEGRAM_BOT}/editMessageText?message_id=${encodeURIComponent(messageId)}&text=${encodeURIComponent(text)}`,
+    method: 'GET'
+  }
+
+  const req = https.request(options, (res) => {
+    res.on('data', (d) => {
+      process.stdout.write(d)
+    })
+  });
+
+  req.on('error', (error) => {
+    console.error(error)
+  });
+
+  req.end();
+};
+
+const deleteMessage = (chatId, messageId) => {
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/${process.env.TELEGRAM_BOT}/deleteMessage?chat_id=${encodeURIComponent(chatId)}&message_id=${encodeURIComponent(messageId)}`,
+    method: 'GET'
+  }
+
+  const req = https.request(options, (res) => {
+    res.on('data', (d) => {
+      process.stdout.write(d)
+    })
+  });
+
+  req.on('error', (error) => {
+    console.error(error)
+  });
+
+  req.end();
+};
+
 const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_message_id) => {
   let replyLine = '';
   let markdownLine = '';
@@ -54,4 +96,4 @@ const postGifToTelegram = (photo, caption) => {
   req.end();
 };
 
-module.exports = { postToTelegram, postGifToTelegram };
+module.exports = { postToTelegram, postGifToTelegram, editMessage, deleteMessage };
