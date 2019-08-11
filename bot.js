@@ -17,6 +17,9 @@ const cashGifs = [
   'https://media1.tenor.com/images/841f559c023d0da26f3b3e046ad5c7df/tenor.gif',
   'https://i.imgur.com/7OWL963.mp4',
   'https://media1.tenor.com/images/50ff9c09c94440d3051bd5bf13f2a36d/tenor.gif',
+  'https://media.giphy.com/media/8UGDqqQIegZLcMN2rO/giphy.gif',
+  'http://giphygifs.s3.amazonaws.com/media/MAA3oWobZycms/giphy.gif',
+  'https://media.giphy.com/media/AslZw11iNXkkx33XZM/giphy.gif',
 ];
 
 let lastMessageId = 0;
