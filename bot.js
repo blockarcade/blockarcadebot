@@ -147,6 +147,11 @@ cron.schedule('30 */12 * * *', () => {
   postJackpotToTelegram();
 });
 
+cron.schedule('0 */6 * * *', () => {
+  console.log(getDate());
+  postVotesToTelegram();
+});
+
 console.log(getDate());
 
 const processData = (data) => {
