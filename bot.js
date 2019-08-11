@@ -195,7 +195,7 @@ const processMessages = (data) => {
     try {
       const room = `@${line.message.chat.username}`;
       const [command, args] = line.message.text.replace('@BlockArcadeBot', '').split(' ');
-      switch (command) {
+      switch (command.toLowerCase()) {
         case '/iost':
           const user = line.message.from.username;
           if (args) {
