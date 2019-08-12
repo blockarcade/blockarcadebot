@@ -58,7 +58,7 @@ const postLeaderboard = () => {
 
         console.log(output);
 
-        postToTelegram(output);
+        postToTelegram(output, undefined, true);
       });
     });
   });
