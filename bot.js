@@ -206,7 +206,7 @@ const processMessages = (data) => {
               postToTelegram('Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one');
             } else {
 
-              if (!isNaN(user.charAt(0))) {
+              if (!isNaN(args.charAt(0))) {
                 postToTelegram('IOST account can not start with a number, sorry!', undefined, false, line.message.message_id);
               } else {
                 changes.set(user, { username: args, message_id: line.message.message_id, room });
