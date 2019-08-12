@@ -164,7 +164,7 @@ const processData = (data) => {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData.status);
-      const jackpot = parsedData.amount > 10 ? 'major' : 'minor';
+      const jackpot = parsedData.amount > 10 ? 'major' : 'mini';
       if (parsedData.status === 'jackpotWin') {
         // Prevent double reporting.
         if (!reportedBets.has(parsedData.paid)) {
