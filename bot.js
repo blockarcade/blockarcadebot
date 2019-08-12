@@ -1,6 +1,6 @@
 const https = require('https');
 const { postToTelegram, postGifToTelegram, deleteMessage } = require('./telegram');
-const { iostRequest, iostABCRequest } = require('./iost');
+const { iostRequest, iostABCRequest, iostPOSTRequest } = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
@@ -24,7 +24,47 @@ const cashGifs = [
 
 let lastMessageId = 0;
 
+const postLeaderboard = () => {
+  iostPOSTRequest('/getContractStorage', {"id":"Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5","key":"leaderboardReward","by_longest_chain":true}, (err, response) => {
 
+    const totalReward = JSON.parse(response).data;
+  
+
+    iostPOSTRequest('/getContractStorage', {"id":"Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5","key":"issuedTIXUsers","by_longest_chain":true}, (err, response) => {
+      const users = JSON.parse(JSON.parse(response).data);
+
+      const fields = users.map((user) => {
+        return { field: user, key: 'issuedTIX'};
+      });
+
+      iostPOSTRequest('/getBatchContractStorage', {"id": "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5","key_fields": fields, "by_longest_chain": true}, (err, response) => {
+        const amounts = JSON.parse(response).datas;
+
+        const scores = users.map((user, i) => {
+          return { user, score: amounts[i] };
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage')
+          .map((score, i) => ({ ...score, place: i + 1 }));
+        
+        let output = '# Leaderboard\n';
+        output += '*#*\t| *Player*\t| *Score*\n';
+        output += '------------------------------------\n';
+
+        newScores.forEach(score => {
+          output += `${score.place}\t| ${score.user}\t| ${Number(score.score).toFixed(2)}\n`;
+        });
+
+        console.log(output);
+
+        postToTelegram(output);
+      });
+    });
+  });
+};
+
+postLeaderboard();
 const postRegisteredUsers = () => {
   const airdropped = new Map();
   userdb.createReadStream()
@@ -232,8 +272,12 @@ const processMessages = (data) => {
             deleteMessage('@blockarcade', line.message.message_id);
             break;
         case '/count':
-            postRegisteredUsers();
             deleteMessage('@blockarcade', line.message.message_id);
+            postRegisteredUsers();
+            break;
+        case '/leaderboard':
+            deleteMessage('@blockarcade', line.message.message_id);
+            postLeaderboard();
             break;
         default:
           console.log('unreconized command', command);
