@@ -52,7 +52,7 @@ const postLeaderboard = () => {
         output += '*#*\t| *Player*\t| *Score*\n';
 
         newScores.forEach(score => {
-          output += `${score.place}\t| ${score.user}\t| ${Number(score.score).toFixed(2)}\n`;
+          output += `${score.place}\t| ${score.user}\t| ${numberWithCommas(Number(score.score).toFixed(2))}\n`;
         });
 
         output += '\n\nPlay now at: https://blockarca.de'
