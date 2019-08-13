@@ -1,5 +1,20 @@
 const https = require('https');
+const fs = require('fs');
+const request = require('request');
 const room = '@blockarcade';
+
+const postImage = (file, caption, chatId = room) => {
+  request.post({
+    url: `https://api.telegram.org/${process.env.TELEGRAM_BOT}/sendPhoto?chat_id=${encodeURIComponent(chatId)}&caption=${encodeURIComponent(caption)}`,
+    formData: {
+        photo: fs.createReadStream(file),
+        filetype: 'png',
+        filename: 'render.png',
+    },
+}, function(error, response, body) {
+    console.log(body);
+});
+};
 
 const editMessage = (messageId, text) => {
   const options = {
@@ -96,4 +111,4 @@ const postGifToTelegram = (photo, caption) => {
   req.end();
 };
 
-module.exports = { postToTelegram, postGifToTelegram, editMessage, deleteMessage };
+module.exports = { postToTelegram, postGifToTelegram, editMessage, deleteMessage, postImage };

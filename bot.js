@@ -1,11 +1,11 @@
 const https = require('https');
-const { postToTelegram, postGifToTelegram, deleteMessage } = require('./telegram');
+const { postToTelegram, postGifToTelegram, deleteMessage, postImage } = require('./telegram');
 const { iostRequest, iostABCRequest, iostPOSTRequest } = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
 const level = require('level');
-
+const writeScores = require('./leaderboard.js');
 const userdb = level('userdb');
 
 const reportedBets = new Map();
@@ -28,7 +28,6 @@ const postLeaderboard = () => {
   iostPOSTRequest('/getContractStorage', {"id":"Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5","key":"leaderboardReward","by_longest_chain":true}, (err, response) => {
 
     const totalReward = JSON.parse(response).data;
-  
 
     iostPOSTRequest('/getContractStorage', {"id":"Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5","key":"issuedTIXUsers","by_longest_chain":true}, (err, response) => {
       const users = JSON.parse(JSON.parse(response).data);
@@ -46,24 +45,17 @@ const postLeaderboard = () => {
 
         scores.sort((a, b) => b.score - a.score);
         const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage')
-          .map((score, i) => ({ ...score, place: i + 1 }));
-        
-        let output = '🤑 $TIX Leaderboard 🤑\n\n';
-        output += '*#*\t| *Player*\t| *Score*\n';
+          .map((score, i) => ({ ...score, place: i + 1, score: numberWithCommas(Number(score.score).toFixed(2))}));
 
-        newScores.forEach(score => {
-          output += `${score.place}\t| ${score.user}\t| ${numberWithCommas(Number(score.score).toFixed(2))}\n`;
-        });
-
-        output += '\n\nPlay now at: https://blockarca.de'
-
-        console.log(output);
-
-        postToTelegram(output, undefined, true);
+        writeScores(newScores).then(() => {
+          postImage('./render.png', 'Play now at: https://blockarca.de');
+        })
       });
     });
   });
 };
+
+postLeaderboard();
 
 const postRegisteredUsers = () => {
   const airdropped = new Map();
