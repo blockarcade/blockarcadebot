@@ -65,7 +65,6 @@ const postLeaderboard = () => {
   });
 };
 
-postLeaderboard();
 const postRegisteredUsers = () => {
   const airdropped = new Map();
   userdb.createReadStream()
