@@ -48,13 +48,14 @@ const postLeaderboard = () => {
         const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage')
           .map((score, i) => ({ ...score, place: i + 1 }));
         
-        let output = '# Leaderboard\n';
+        let output = '🤑 $TIX Leaderboard 🤑\n\n';
         output += '*#*\t| *Player*\t| *Score*\n';
-        output += '------------------------------------\n';
 
         newScores.forEach(score => {
           output += `${score.place}\t| ${score.user}\t| ${Number(score.score).toFixed(2)}\n`;
         });
+
+        output += '\n\nPlay now at: https://blockarca.de'
 
         console.log(output);
 
