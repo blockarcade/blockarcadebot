@@ -8,6 +8,28 @@ const level = require('level');
 const writeScores = require('./leaderboard.js');
 const userdb = level('userdb');
 
+const getDate = () => {
+  const now = new Date();
+  return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+}
+
+cron.schedule('30 */12 * * *', () => {
+  console.log(getDate());
+  postJackpotToTelegram();
+});
+
+cron.schedule('0 */6 * * *', () => {
+  console.log(getDate());
+  postVotesToTelegram();
+});
+
+cron.schedule('15 */8 * * *', () => {
+  console.log(getDate());
+  postLeaderboard();
+});
+
+console.log(getDate());
+
 const reportedBets = new Map();
 
 const cashGifs = [
@@ -47,7 +69,7 @@ const postLeaderboard = () => {
         const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage')
           .map((score, i) => ({ ...score, place: i + 1, score: numberWithCommas(Number(score.score).toFixed(2))}));
 
-        writeScores(newScores).then(() => {
+        writeScores(newScores, numberWithCommas(Number(totalReward).toFixed(2))).then(() => {
           postImage('./render.png', 'Play now at: https://blockarca.de');
         })
       });
@@ -167,25 +189,7 @@ const postInstructionsToTelegram = (user) => {
   // setTimeout(() => {
   //   postToTelegram('/iost YOUR IOST ACCOUNT');
   // }, 1000);
-  
 }
-
-const getDate = () => {
-  const now = new Date();
-  return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
-}
-
-cron.schedule('30 */12 * * *', () => {
-  console.log(getDate());
-  postJackpotToTelegram();
-});
-
-cron.schedule('0 */6 * * *', () => {
-  console.log(getDate());
-  postVotesToTelegram();
-});
-
-console.log(getDate());
 
 const processData = (data) => {
   const lines = data.toString('utf8').split("\n");
