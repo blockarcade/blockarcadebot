@@ -8,7 +8,7 @@ const writeScores = (scores) => {
       }
 
       Jimp.loadFont(Jimp.FONT_SANS_16_WHITE).then(font => { 
-        const textOffset = 50;    
+        const textOffset = 45;    
         const tasks = scores.map((score, i) => {
           return image.print(font, 0, 25 * (i + 1) + textOffset, { text: `${score.place}. ${score.user} ${score.score}`, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER }, 600);
         });
