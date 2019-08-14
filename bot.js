@@ -66,7 +66,7 @@ const postLeaderboard = () => {
         });
 
         scores.sort((a, b) => b.score - a.score);
-        const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage')
+        const newScores = scores.slice(0, 11).filter(a => a.user !== 'octalmage').filter(a => a.user !== '0ctane')
           .map((score, i) => ({ ...score, place: i + 1, score: numberWithCommas(Number(score.score).toFixed(2))}));
 
         writeScores(newScores, numberWithCommas(Number(totalReward).toFixed(2))).then(() => {
