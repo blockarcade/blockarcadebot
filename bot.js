@@ -150,7 +150,7 @@ const postJackpotToTelegram = () => {
           }
           
           const body = JSON.parse(response);
-          const tixBalance = body.balance;
+          const iplayBalance = body.balance;
   
           iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true', (err, response) => {
             if (err) {
