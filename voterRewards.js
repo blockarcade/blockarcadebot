@@ -32,8 +32,8 @@ const rewardVoters = () => {
               });
               
               rewards.forEach((amount, account) => {
-                console.log(`iwallet --server 18.209.137.246:30002 --account blockarcade call Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5 "buyTIX" "[${amount}, \"${account}\"]`);
-                exec(`iwallet --server 18.209.137.246:30002 --account blockarcade call Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5 "buyTIX" "[${amount}, \"${account}\"]`, {stdio: 'inherit'});
+                console.log(`iwallet --server 18.209.137.246:30002 --account blockarcade call Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5 "buyTIX" '[${amount}, \"${account}\"]'`);
+                exec(`iwallet --server 18.209.137.246:30002 --account blockarcade call Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5 "buyTIX" '[${amount}, \"${account}\"]'`, {stdio: 'inherit'});
                 execSync('sleep 0.5');
               });
             });
