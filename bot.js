@@ -161,7 +161,7 @@ const postJackpotToTelegram = () => {
           const body = JSON.parse(response);
           const lolBalance = body.balance;
           const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
-          postGifToTelegram(cashGif, `*Major jackpot is up to ${numberWithCommas((iostBalance / 10).toFixed(2))} $IOST, ${numberWithCommas((itrxBalance/ 10).toFixed(2))} $ITRX, ${numberWithCommas((tixBalance / 10).toFixed(2))} $TIX, ${numberWithCommas((iplayBalance / 10).toFixed(2))} $IPLAY and ${numberWithCommas((lolBalance / 10).toFixed(2))} $IPLAY!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+          postGifToTelegram(cashGif, `*Major jackpot is up to ${numberWithCommas((iostBalance / 10).toFixed(2))} $IOST, ${numberWithCommas((itrxBalance/ 10).toFixed(2))} $ITRX, ${numberWithCommas((tixBalance / 10).toFixed(2))} $TIX, ${numberWithCommas((iplayBalance / 10).toFixed(2))} $IPLAY and ${numberWithCommas((lolBalance / 10).toFixed(2))} $LOL!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
         });
       });
       });
