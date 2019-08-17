@@ -70,7 +70,7 @@ const postLeaderboard = () => {
           .map((score, i) => ({ ...score, place: i + 1, score: numberWithCommas(Number(score.score).toFixed(2))}));
 
         writeScores(newScores, numberWithCommas(Number(totalReward).toFixed(2))).then(() => {
-          postImage('./render.png', 'Play now at: https://blockarca.de');
+          postImage('./render.png', "Leaderboard resets Sunday at 11:59pm CST\n\nPlay now at: https://blockarca.de");
         })
       });
     });
