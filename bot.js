@@ -6,6 +6,7 @@ const dateFormat = require('dateformat');
 const cron = require('node-cron');
 const level = require('level');
 const writeScores = require('./leaderboard.js');
+const validIOSTAccount = require('./validIOSTAccount.js');
 const userdb = level('userdb');
 
 const getDate = () => {
@@ -240,6 +241,10 @@ const processMessages = (data) => {
 
     try {
       const room = `@${line.message.chat.username}`;
+      if (room !== '@blockarcade') {
+        return;
+      }
+
       const [command, args] = line.message.text.replace('@BlockArcadeBot', '').split(' ');
       switch (command.toLowerCase()) {
         case '/iost':
@@ -248,9 +253,11 @@ const processMessages = (data) => {
             if (!user) {
               postToTelegram('Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one');
             } else {
-
+              
               if (!isNaN(args.charAt(0))) {
                 postToTelegram('IOST account can not start with a number, sorry!', undefined, false, line.message.message_id);
+              } else if (!validIOSTAccount(args)) {
+                postToTelegram('Invalid IOST account', undefined, false, line.message.message_id);
               } else {
                 changes.set(user, { username: args, message_id: line.message.message_id, room });
               }

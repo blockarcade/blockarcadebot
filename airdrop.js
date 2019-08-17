@@ -7,6 +7,8 @@ const cron = require('node-cron');
 const level = require('level');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
+const validIOSTAccount = require('./validIOSTAccount.js');
+const shellescape = require('shell-escape');
 
 const userdb = level('userdb');
 
@@ -51,8 +53,13 @@ userdb.createReadStream()
       keys.forEach(async (user) => {
         // console.log('user', user);
         // console.log('key', airdropped.get(user));
-        exec(`iwallet --account blockarcade -s 18.209.137.246:30002 call token.iost transfer '["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`,{stdio: 'inherit'});
-        execSync('sleep 1');
+        if (!validIOSTAccount(airdropped.get(user))) {
+          console.log('Invalid IOST user:', airdropped.get(user), user);
+        } else {
+          const command = ['iwallet', '--account', 'blockarcade', '-s', '18.209.137.246:30002', 'call', 'token.iost', 'transfer', `["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`];
+          exec(shellescape(command), { stdio: 'inherit' });
+          execSync('sleep 1');
+        }
       });
    } catch (e) {
      console.log(e);
