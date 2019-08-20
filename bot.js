@@ -35,14 +35,12 @@ const reportedBets = new Map();
 
 const cashGifs = [
   'https://media1.tenor.com/images/c8fc4c71fd9d5d1c6414da763bb5df51/tenor.gif',
-  'https://uproxx.files.wordpress.com/2016/03/silicon-valley-gif.gif',
-  'https://media1.tenor.com/images/42305eccf731de092494271770d6bd2d/tenor.gif',
-  'https://media1.tenor.com/images/841f559c023d0da26f3b3e046ad5c7df/tenor.gif',
   'https://i.imgur.com/7OWL963.mp4',
-  'https://media1.tenor.com/images/50ff9c09c94440d3051bd5bf13f2a36d/tenor.gif',
   'https://media.giphy.com/media/8UGDqqQIegZLcMN2rO/giphy.gif',
   'http://giphygifs.s3.amazonaws.com/media/MAA3oWobZycms/giphy.gif',
   'https://media.giphy.com/media/AslZw11iNXkkx33XZM/giphy.gif',
+  'https://thumbs.gfycat.com/PrestigiousEmbellishedBlackrhino-size_restricted.gif',
+  'https://thumbs.gfycat.com/LongAdeptAsiaticwildass-size_restricted.gif',
 ];
 
 let lastMessageId = 0;
