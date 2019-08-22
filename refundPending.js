@@ -17,6 +17,11 @@ const data = { ...defaultParams,
   "key": "nonce"
 };
 
+const getDate = () => {
+  const now = new Date();
+  return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+}
+
 const getGames = async () => {
   let games = {};
   try {
