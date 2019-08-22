@@ -35,7 +35,6 @@ const reportedBets = new Map();
 
 const cashGifs = [
   'https://media1.tenor.com/images/c8fc4c71fd9d5d1c6414da763bb5df51/tenor.gif',
-  'https://i.imgur.com/7OWL963.mp4',
   'https://media.giphy.com/media/8UGDqqQIegZLcMN2rO/giphy.gif',
   'http://giphygifs.s3.amazonaws.com/media/MAA3oWobZycms/giphy.gif',
   'https://media.giphy.com/media/AslZw11iNXkkx33XZM/giphy.gif',
