@@ -150,6 +150,15 @@ const postJackpotToTelegram = () => {
           
           const body = JSON.parse(response);
           const iplayBalance = body.balance;
+
+          iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/metx/true', (err, response) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            
+            const body = JSON.parse(response);
+            const metxBalance = body.balance;
   
           iostRequest('/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true', (err, response) => {
             if (err) {
@@ -160,8 +169,9 @@ const postJackpotToTelegram = () => {
           const body = JSON.parse(response);
           const lolBalance = body.balance;
           const cashGif = cashGifs[Math.floor(Math.random() * cashGifs.length)];
-          postGifToTelegram(cashGif, `*Major jackpot is up to ${numberWithCommas((iostBalance / 10).toFixed(2))} $IOST, ${numberWithCommas((itrxBalance/ 10).toFixed(2))} $ITRX, ${numberWithCommas((tixBalance / 10).toFixed(2))} $TIX, ${numberWithCommas((iplayBalance / 10).toFixed(2))} $IPLAY and ${numberWithCommas((lolBalance / 10).toFixed(2))} $LOL!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
+          postGifToTelegram(cashGif, `*Major jackpot is up to ${numberWithCommas((iostBalance / 10).toFixed(2))} $IOST, ${numberWithCommas((itrxBalance/ 10).toFixed(2))} $ITRX, ${numberWithCommas((tixBalance / 10).toFixed(2))} $TIX, ${numberWithCommas((iplayBalance / 10).toFixed(2))} $IPLAY, ${numberWithCommas((metxBalance / 10).toFixed(2))} $METX and ${numberWithCommas((lolBalance / 10).toFixed(2))} $LOL!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`);
         });
+      });
       });
       });
     });
