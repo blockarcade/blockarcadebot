@@ -12,7 +12,7 @@ const shellescape = require('shell-escape');
 
 const userdb = level('userdb');
 
-const airdropAmount = 5000;
+const airdropAmount = 50000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
@@ -64,8 +64,12 @@ userdb.createReadStream()
    } catch (e) {
      console.log(e);
    } 
-  //  console.log(`AIRDROPPED ${dropAmount} TIX to ${keys.join(', ')}!!!!`);
-    postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${keys.join(', ')}!!!!`, undefined, false);
+    let i,j,temparray,chunk = 100;
+    for (i=0,j=keys.length; i<j; i+=chunk) {
+      temparray = keys.slice(i,i+chunk);
+      postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${temparray.join(', ')}!!!!`, undefined, false);
+      console.log(`AIRDROPPED ${dropAmount} TIX to ${temparray.join(', ')}!!!!`);
+    }
   });
 
 
