@@ -6,6 +6,7 @@ const dateFormat = require('dateformat');
 const cron = require('node-cron');
 const level = require('level');
 const writeScores = require('./leaderboard.js');
+const renderRanking = require('./dappRanking.js');
 const validIOSTAccount = require('./validIOSTAccount.js');
 const userdb = level('userdb');
 
@@ -208,6 +209,12 @@ const postInstructionsToTelegram = (user) => {
   // }, 1000);
 }
 
+const postDappRanking = async () => {
+  await renderRanking();
+
+  postImage('./rank.png', "Dapp.com ranking!\n\nPlay now at: https://blockarca.de");
+}
+
 const processData = (data) => {
   const lines = data.toString('utf8').split("\n");
   lines.forEach(line => {
@@ -286,6 +293,10 @@ const processMessages = (data) => {
             break;
         case '/vote':
             postVotesToTelegram();
+            deleteMessage('@blockarcade', line.message.message_id);
+            break;
+        case '/rank':
+            postDappRanking();
             deleteMessage('@blockarcade', line.message.message_id);
             break;
         case '/count':

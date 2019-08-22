@@ -3,4 +3,5 @@ config.sh
 node_modules/
 userdb/
 render.png
+rank.png
 gamesdb/
