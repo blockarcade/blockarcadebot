@@ -1,55 +1,83 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 
 const renderRanking = async () => {
-  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
   await page.setViewport({ width: 375, height: 667 });
-  await page.goto('https://www.dapp.com/dapps/IOST');
+  await page.goto("https://www.dapp.com/dapps/IOST");
 
-  const bannerElement = await page.$('.banner-sec');
-  const suggestElement = await page.$('.suggest-container');
-  const selectBarElement = await page.$('.choose-select-bar');
-  const searchElement = await page.$('.topsearch');
+  const bannerElement = await page.$(".banner-sec");
+  const suggestElement = await page.$(".suggest-container");
+  const selectBarElement = await page.$(".choose-select-bar");
+  const searchElement = await page.$(".topsearch");
+  const menuElement = await page.$(".mobile-slider-generator");
+  const moreSelections = await page.$(".more-selections");
 
-  page.addScriptTag({ content: `
+  page.addScriptTag({
+    content: `
   const removeElement = (element) => {
     if (element.parentNode !== null) {
       element.parentNode.removeChild(element);
     }
   };
-  `})
+  `,
+  });
 
-
-  await page.evaluate((element) => {
+  await page.evaluate(element => {
     removeElement(element);
   }, bannerElement);
 
-  await new Promise((resolve => setTimeout(resolve, 1000)));
+  await page.evaluate(element => {
+    removeElement(element);
+  }, menuElement);
 
-  const secondBannerElement = await page.$('.banner-sec');
+  await page.evaluate(() => {
+    const tags = document.querySelectorAll(".dapp-item-for-mobile-outer");
+    for (let i = 0; i < tags.length; i++) {
+      
+      if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
+        const found = tags[i];
+        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(216,36,118,.05), 0 5px 10px 0 rgba(216,36,118,.5)";
+        found.style.margin = '25px 0px';
+        break;
+      }
+    }
+  });
 
-  await page.evaluate((element) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const secondBannerElement = await page.$(".banner-sec");
+
+  await page.evaluate(element => {
     removeElement(element);
   }, secondBannerElement);
 
-  await page.evaluate((element) => {
+  await page.evaluate(element => {
     removeElement(element);
   }, bannerElement);
 
-  await page.evaluate((element) => {
+  await page.evaluate(element => {
     removeElement(element);
   }, suggestElement);
 
-  await page.evaluate((element) => {
+  await page.evaluate(element => {
     removeElement(element);
   }, selectBarElement);
 
-  await page.evaluate((element) => {
+  await page.evaluate(element => {
     removeElement(element);
   }, searchElement);
 
-  await page.screenshot({path: 'rank.png'});
+  await page.evaluate(element => {
+    removeElement(element);
+  }, moreSelections);
+
+  await page.screenshot({ path: "rank.png" });
   await browser.close();
 };
+
+renderRanking();
 
 module.exports = renderRanking;
