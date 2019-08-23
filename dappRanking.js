@@ -5,7 +5,7 @@ const renderRanking = async () => {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 375, height: 600 });
+  await page.setViewport({ width: 400, height: 400 });
   await page.goto("https://www.dapp.com/dapps/IOST");
 
   const bannerElement = await page.$(".banner-sec");
@@ -17,11 +17,11 @@ const renderRanking = async () => {
 
   page.addScriptTag({
     content: `
-  const removeElement = (element) => {
-    if (element.parentNode !== null) {
-      element.parentNode.removeChild(element);
-    }
-  };
+      const removeElement = (element) => {
+        if (element.parentNode !== null) {
+          element.parentNode.removeChild(element);
+        }
+      };
   `,
   });
 
@@ -41,6 +41,11 @@ const renderRanking = async () => {
         const found = tags[i];
         found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.6)";
         found.style.margin = '25px 0px';
+        found.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'center'
+        });
         break;
       }
     }
@@ -73,6 +78,16 @@ const renderRanking = async () => {
   await page.evaluate(element => {
     removeElement(element);
   }, moreSelections);
+
+  await page.evaluate(() => {
+    const node = document.createElement('span');  
+    node.style.color = '#090215';
+    node.style.float = 'right';
+    node.style.margin = '1em';
+    const textnode = document.createTextNode('https://blockarca.de');
+    node.appendChild(textnode); 
+    document.querySelector(".mobile-menu-header").appendChild(node); 
+  });
 
   await page.screenshot({ path: "rank.png" });
   await browser.close();
