@@ -5,7 +5,7 @@ const renderRanking = async () => {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 375, height: 667 });
+  await page.setViewport({ width: 375, height: 600 });
   await page.goto("https://www.dapp.com/dapps/IOST");
 
   const bannerElement = await page.$(".banner-sec");
@@ -39,7 +39,7 @@ const renderRanking = async () => {
       
       if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
         const found = tags[i];
-        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.5)";
+        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.6)";
         found.style.margin = '25px 0px';
         break;
       }
