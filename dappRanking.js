@@ -33,24 +33,6 @@ const renderRanking = async () => {
     removeElement(element);
   }, menuElement);
 
-  await page.evaluate(() => {
-    const tags = document.querySelectorAll(".dapp-item-for-mobile-outer");
-    for (let i = 0; i < tags.length; i++) {
-      
-      if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
-        const found = tags[i];
-        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.6)";
-        found.style.margin = '25px 0px';
-        found.scrollIntoView({
-          behavior: 'auto',
-          block: 'center',
-          inline: 'center'
-        });
-        break;
-      }
-    }
-  });
-
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const secondBannerElement = await page.$(".banner-sec");
@@ -81,13 +63,32 @@ const renderRanking = async () => {
 
   await page.evaluate(() => {
     const node = document.createElement('span');  
-    node.style.color = '#090215';
+    node.style.color = 'rgb(70, 25, 106);';
     node.style.float = 'right';
     node.style.margin = '1em';
     node.style.fontWeight = 'bold';
     const textnode = document.createTextNode('https://blockarca.de');
     node.appendChild(textnode); 
     document.querySelector(".mobile-menu-header").appendChild(node); 
+  });
+
+  await page.evaluate(() => {
+    const tags = document.querySelectorAll(".dapp-item-for-mobile-outer");
+    for (let i = 0; i < tags.length; i++) {
+      
+      if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
+        const found = tags[i];
+        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.6)";
+        found.style.margin = '25px 0px';
+        found.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'center'
+        });
+        window.scrollBy(0, -30);
+        break;
+      }
+    }
   });
 
   await page.screenshot({ path: "rank.png" });
