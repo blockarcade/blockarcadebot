@@ -63,10 +63,10 @@ const renderRanking = async () => {
 
   await page.evaluate(() => {
     const node = document.createElement('span');  
-    node.style.color = 'rgb(70, 25, 106);';
+    node.style.color = '#46196a';
     node.style.float = 'right';
     node.style.margin = '1em';
-    node.style.fontWeight = 'bold';
+    // node.style.fontWeight = 'bold';
     const textnode = document.createTextNode('https://blockarca.de');
     node.appendChild(textnode); 
     document.querySelector(".mobile-menu-header").appendChild(node); 
