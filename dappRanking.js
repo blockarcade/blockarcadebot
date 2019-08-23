@@ -39,7 +39,7 @@ const renderRanking = async () => {
       
       if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
         const found = tags[i];
-        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(216,36,118,.05), 0 5px 10px 0 rgba(216,36,118,.5)";
+        found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.5)";
         found.style.margin = '25px 0px';
         break;
       }

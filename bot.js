@@ -211,8 +211,8 @@ const postInstructionsToTelegram = (user) => {
 
 const postDappRanking = async () => {
   await renderRanking();
-
-  postImage('./rank.png', "Dapp.com ranking!\n\nPlay now at: https://blockarca.de");
+  
+  postImage('./rank.png', "**Dapp.com Ranking**\n\nCheck out our stats and leave a review at: https://www.dapp.com/dapp/blockarcade");
 }
 
 const processData = (data) => {
