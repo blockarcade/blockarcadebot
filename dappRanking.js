@@ -84,6 +84,7 @@ const renderRanking = async () => {
     node.style.color = '#090215';
     node.style.float = 'right';
     node.style.margin = '1em';
+    node.style.fontWeight = 'bold';
     const textnode = document.createTextNode('https://blockarca.de');
     node.appendChild(textnode); 
     document.querySelector(".mobile-menu-header").appendChild(node); 
