@@ -192,7 +192,7 @@ const postVotesToTelegram = () => {
 
     const amountLeft = 8000000 - totalVotes;
     
-    postGifToTelegram('https://media.giphy.com/media/3SLnytgfJTaxy/giphy.gif', `*BlockArcade's IOST node is already giving rewards as a parter node at ${numberWithCommas(totalVotes.toFixed(0))} votes!*\n\nOnly ${numberWithCommas(amountLeft.toFixed(0).toLocaleString())} votes left to become a servi node!\n\nVote now to receive an additional 25% of rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade`);
+    postGifToTelegram('./vote.jpg', `*BlockArcade's IOST node is already giving rewards as a parter node at ${numberWithCommas(totalVotes.toFixed(0))} votes!*\n\nOnly ${numberWithCommas(amountLeft.toFixed(0).toLocaleString())} votes left to become a servi node!\n\nVote now to receive an additional 25% of rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade`);
   });
 };
 
