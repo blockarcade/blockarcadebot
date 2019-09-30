@@ -377,7 +377,7 @@ const processMessages = data => {
       const user = line.message.from.username;
 
       if (user) {
-        activedb.put(user, JSON.stringify({ date: line.message.date }));
+        activedb.put(user.trim(), JSON.stringify({ date: line.message.date }));
       }
 
       const [command, args] = line.message.text
