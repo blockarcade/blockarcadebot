@@ -137,8 +137,8 @@ const postRegisteredUsers = () => {
 
       try {
         await new Promise((resolve, reject) => {
-          activedb.get(data.key.trim(), function(err, value) {
-            console.log(err);
+          console.log('Checking: ', username);
+          activedb.get(username, function(err, value) {
             if (err) reject('user not found');
 
             resolve();
@@ -146,7 +146,7 @@ const postRegisteredUsers = () => {
         });
       } catch (e) {
         console.log("User not active: ", data.key);
-        return;
+        
       }
 
       if (
