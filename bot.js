@@ -138,6 +138,7 @@ const postRegisteredUsers = () => {
       try {
         await new Promise((resolve, reject) => {
           activedb.get(data.key.trim(), function(err, value) {
+            console.log(err);
             if (err) reject('user not found');
 
             resolve();
