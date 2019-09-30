@@ -142,14 +142,13 @@ const postRegisteredUsers = () => {
         await new Promise((resolve, reject) => {
           console.log('Checking: ', key);
           activedb.get(key, function(err, value) {
-            if (err) reject('user not found');
+            if (err) return reject('user not found');
             console.log('found user!', key);
             resolve();
           });
         });
       } catch (e) {
         console.log("User not active: ", data.key);
-        
       }
 
       if (
@@ -158,6 +157,12 @@ const postRegisteredUsers = () => {
       ) {
         console.log("Skipping user:", user.iostAccount);
         return;
+      }
+
+      if (user.iostAccount) {
+        airdropped.set(username, user.iostAccount);
+      } else {
+        console.log('no username', data);
       }
     })
     .on("error", function(err) {
