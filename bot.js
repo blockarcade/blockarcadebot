@@ -128,7 +128,10 @@ const postRegisteredUsers = () => {
     .on("data", async data => {
       let username;
       let user = {};
+      let key;
+
       try {
+        key = `${data.key.trim()}`;
         username = `@${data.key.trim()}`;
         user = JSON.parse(data.value);
       } catch (e) {
@@ -137,10 +140,10 @@ const postRegisteredUsers = () => {
 
       try {
         await new Promise((resolve, reject) => {
-          console.log('Checking: ', username);
-          activedb.get(username, function(err, value) {
+          console.log('Checking: ', key);
+          activedb.get(key, function(err, value) {
             if (err) reject('user not found');
-
+            console.log('found user!', key);
             resolve();
           });
         });
