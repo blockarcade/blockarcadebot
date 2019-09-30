@@ -19,7 +19,7 @@ const writeScores = require("./leaderboard.js");
 const renderRanking = require("./dappRanking.js");
 const validIOSTAccount = require("./validIOSTAccount.js");
 const userdb = level("userdb");
-const active = level("activedb");
+const activedb = level("activedb");
 
 const getDate = () => {
   const now = new Date();
