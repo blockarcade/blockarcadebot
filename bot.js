@@ -378,6 +378,7 @@ const processMessages = data => {
 
       if (user) {
         activedb.put(user.trim(), JSON.stringify({ date: line.message.date }));
+        console.log(`Marking ${user} as active!`);
       }
 
       const [command, args] = line.message.text
