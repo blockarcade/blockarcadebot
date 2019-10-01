@@ -123,7 +123,7 @@ const postLeaderboard = () => {
 
 const postRegisteredUsers = () => {
   const airdropped = new Map();
-  activedb
+  userdb
     .createReadStream()
     .on("data", async data => {
       let username;
@@ -142,8 +142,8 @@ const postRegisteredUsers = () => {
 
       try {
         await new Promise((resolve, reject) => {
-          console.log('Checking: ', key);
-          activedb.get(key, function(err, value) {
+          console.log('Checking: ', key, user);
+          activedb.get(key, function(err) {
             if (err) return reject('user not found');
             console.log('found user!', key);
             resolve();
