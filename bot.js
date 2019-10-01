@@ -123,12 +123,14 @@ const postLeaderboard = () => {
 
 const postRegisteredUsers = () => {
   const airdropped = new Map();
-  userdb
+  activedb
     .createReadStream()
     .on("data", async data => {
       let username;
       let user = {};
       let key;
+
+      console.log(data);
 
       try {
         key = `${data.key.trim()}`;
@@ -155,7 +157,7 @@ const postRegisteredUsers = () => {
         typeof user.iostAccount === "undefined" ||
         username === "@octalmage"
       ) {
-        console.log("Skipping user:", user.iostAccount);
+        console.log("Skipping user:", data.key);
         return;
       }
 
@@ -176,13 +178,15 @@ const postRegisteredUsers = () => {
       const keys = Array.from(airdropped.keys());
       console.log(airdropped);
 
-      postToTelegram(
-        `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
-        undefined,
-        true
-      );
+      // postToTelegram(
+      //   `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
+      //   undefined,
+      //   true
+      // );
     });
 };
+
+postRegisteredUsers();
 
 const postJackpotToTelegram = () => {
   iostRequest(
