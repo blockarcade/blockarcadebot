@@ -151,6 +151,7 @@ const postRegisteredUsers = () => {
         });
       } catch (e) {
         console.log("User not active: ", data.key);
+        return;
       }
 
       if (
