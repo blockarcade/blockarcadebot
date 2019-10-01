@@ -178,7 +178,7 @@ const postRegisteredUsers = () => {
       console.log("Stream ended");
       const keys = Array.from(airdropped.keys());
       console.log(airdropped);
-
+      console.log('found accounts: ' + keys.length);
       // postToTelegram(
       //   `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
       //   undefined,
