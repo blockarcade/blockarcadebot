@@ -132,7 +132,7 @@ const postRegisteredUsers = () => {
 
       try {
         key = `${data.key.trim()}`;
-        username = `@${data.key.trim()}`;
+        username = `@${key}`;
         user = JSON.parse(data.value);
       } catch (e) {
         console.log(e);
@@ -177,7 +177,7 @@ const postRegisteredUsers = () => {
       console.log(airdropped);
 
       postToTelegram(
-        `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on September 12th 💰💰`,
+        `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
         undefined,
         true
       );
