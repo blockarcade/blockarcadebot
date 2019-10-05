@@ -183,8 +183,10 @@ const postRegisteredUsers = () => {
           })
       )
 
+      const filteredKeys = newKeys.filter(el => el != null);
+      
       postToTelegram(
-        `💰💰 There are *${newKeys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
+        `💰💰 There are *${filteredKeys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
         undefined,
         true
       );
