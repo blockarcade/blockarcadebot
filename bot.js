@@ -293,8 +293,6 @@ const postJackpotToTelegram = () => {
                             )} $LOL*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`
                           );
                         }
-
-                    
                       );
                     });
                     }
@@ -375,9 +373,12 @@ const processData = data => {
           postToTelegram(
             `*${
               parsedData.player
-            }* just went for the *${jackpot} jackpot* and won *${JSON.parse(
+            }* just went for the *${jackpot} jackpot* and won\n*${JSON.parse(
               parsedData.paid
-            ).join(" and ")}!!!!*\n\nCongratulations ${parsedData.player}!`
+            ).map((paid) => {
+              const [amount, token] = paid.split(' ');
+              return `${amount.toFixed(2)} $${token}`;
+            }).join("\n")}!!!!*\n\nCongratulations ${parsedData.player}!`
           );
         }
       }
