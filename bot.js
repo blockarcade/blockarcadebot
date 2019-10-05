@@ -176,10 +176,13 @@ const postRegisteredUsers = () => {
                 console.log('found user!', key);
                 resolve(username);
               });
-            });
+            })
+            .catch((e) => {
+              console.log(e, username);
+            })
           })
       )
-      
+
       postToTelegram(
         `💰💰 There are *${newKeys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
         undefined,
