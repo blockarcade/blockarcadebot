@@ -121,6 +121,8 @@ const postLeaderboard = () => {
   );
 };
 
+let tasks = [];
+
 const postRegisteredUsers = () => {
   const airdropped = new Map();
   userdb
@@ -140,23 +142,8 @@ const postRegisteredUsers = () => {
         console.log(e);
       }
 
-      try {
-        await new Promise((resolve, reject) => {
-          console.log('Checking: ', key, user);
-          activedb.get(key, function(err) {
-            if (err) return reject('user not found');
-            console.log('found user!', key);
-            resolve();
-          });
-        });
-      } catch (e) {
-        console.log("User not active: ", data.key);
-        return;
-      }
-
       if (
-        typeof user.iostAccount === "undefined" ||
-        username === "@octalmage"
+        typeof user.iostAccount === "undefined"
       ) {
         console.log("Skipping user:", data.key);
         return;
@@ -174,11 +161,26 @@ const postRegisteredUsers = () => {
     .on("close", function() {
       console.log("Stream closed");
     })
-    .on("end", () => {
+    .on("end", async () => {
       console.log("Stream ended");
       const keys = Array.from(airdropped.keys());
       console.log(airdropped);
       console.log('found accounts: ' + keys.length);
+      const newKeys = await Promise.all(
+        keys.map((username) => {
+          const key = username.replace('@', '');
+            return new Promise((resolve, reject) => {
+              console.log('Checking: ', key, username);
+              activedb.get(key, function(err) {
+                if (err) return reject('user not found');
+                console.log('found user!', key);
+                resolve(username);
+              });
+            });
+          })
+      )
+
+      console.log(newKeys);
       // postToTelegram(
       //   `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
       //   undefined,
@@ -244,6 +246,18 @@ const postJackpotToTelegram = () => {
                       const body = JSON.parse(response);
                       const metxBalance = body.balance;
 
+
+                      iostRequest(
+                        "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iengy/true",
+                        (err, response) => {
+                          if (err) {
+                            console.log(err);
+                            return;
+                          }
+    
+                          const body = JSON.parse(response);
+                          const iengyBalance = body.balance;
+
                       iostRequest(
                         "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true",
                         (err, response) => {
@@ -260,22 +274,27 @@ const postJackpotToTelegram = () => {
                             ];
                           postGifToTelegram(
                             cashGif,
-                            `*Major jackpot is up to ${numberWithCommas(
+                            `*Major jackpot is up to:\n${numberWithCommas(
                               (iostBalance / 10).toFixed(2)
-                            )} $IOST, ${numberWithCommas(
+                            )} $IOST\n${numberWithCommas(
                               (itrxBalance / 10).toFixed(2)
-                            )} $ITRX, ${numberWithCommas(
+                            )} $ITRX\n${numberWithCommas(
                               (tixBalance / 10).toFixed(2)
-                            )} $TIX, ${numberWithCommas(
+                            )} $TIX\n${numberWithCommas(
                               (iplayBalance / 10).toFixed(2)
-                            )} $IPLAY, ${numberWithCommas(
+                            )} $IPLAY\n${numberWithCommas(
+                              (iengyBalance / 10).toFixed(2)
+                            )} $IENGY\n${numberWithCommas(
                               (metxBalance / 10).toFixed(2)
-                            )} $METX and ${numberWithCommas(
+                            )} $METX\n${numberWithCommas(
                               (lolBalance / 10).toFixed(2)
-                            )} $LOL!*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`
+                            )} $LOL*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`
                           );
                         }
+
+                    
                       );
+                    });
                     }
                   );
                 }
