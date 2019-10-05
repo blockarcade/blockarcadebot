@@ -179,17 +179,14 @@ const postRegisteredUsers = () => {
             });
           })
       )
-
-      console.log(newKeys);
-      // postToTelegram(
-      //   `💰💰 There are *${keys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
-      //   undefined,
-      //   true
-      // );
+      
+      postToTelegram(
+        `💰💰 There are *${newKeys.length}* $IOST accounts registered for the next AIRDROP! 20,000 $TIX airdrop happening on October 12th 💰💰`,
+        undefined,
+        true
+      );
     });
 };
-
-postRegisteredUsers();
 
 const postJackpotToTelegram = () => {
   iostRequest(
