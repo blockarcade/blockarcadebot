@@ -462,6 +462,7 @@ const processMessages = data => {
           deleteMessage("@blockarcade", line.message.message_id);
           break;
         case "/check":
+         const user = line.message.from.username;
           activedb.get(user, (err) => {
             if (err) {
               postToTelegram(
@@ -514,7 +515,7 @@ const processMessages = data => {
         userdb.put(user, JSON.stringify({ iostAccount: change.username }));
       });
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   });
 };
