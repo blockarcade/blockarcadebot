@@ -461,6 +461,25 @@ const processMessages = data => {
           postJackpotToTelegram();
           deleteMessage("@blockarcade", line.message.message_id);
           break;
+        case "/check":
+          activedb.get(user, function(err) {
+            if (err) {
+              postToTelegram(
+                "You're not on the list!",
+                undefined,
+                false,
+                line.message.message_id
+              );
+            } else {
+              postToTelegram(
+                `You're on the list ${user}!`,
+                undefined,
+                false,
+                line.message.message_id
+              );
+            }
+          });
+          break;
         case "/airdrop":
           postInstructionsToTelegram();
           deleteMessage("@blockarcade", line.message.message_id);
