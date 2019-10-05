@@ -4,8 +4,10 @@ const exec = require('child_process').exec;
 
 const rewardSplit = 0.25;
 
-const votesAPI = 'https://api.iostabc.com/api/?apikey=6cfb2325fd0d6ccbd2e61d5793769eb0&module=producer&action=get-producer-voter&producer=blockarcade';
-const totalVotesAPI = 'https://api.iostabc.com/api/?apikey=hc&module=producer&action=get-producer-detail&producer=blockarcade';
+const IOSTABC_API_KEY = process.env.IOSTABC_API_KEY;
+
+const votesAPI = `https://api.iostabc.com/api/?apikey=${IOSTABC_API_KEY}&module=producer&action=get-producer-voter&producer=blockarcade`;
+const totalVotesAPI = `https://api.iostabc.com/api/?apikey=${IOSTABC_API_KEY}&module=producer&action=get-producer-detail&producer=blockarcade`;
 
 const rewards = new Map();
 
