@@ -376,14 +376,15 @@ const processData = data => {
             }* just went for the *${jackpot} jackpot* and won\n*${JSON.parse(
               parsedData.paid
             ).map((paid) => {
+              console.log(paid);
               const [amount, token] = paid.split(' ');
-              return `${amount.toFixed(2)} $${token}`;
+              return `${amount.toFixed(2)} ${token}`;
             }).join("\n")}!!!!*\n\nCongratulations ${parsedData.player}!`
           );
         }
       }
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   });
 };
