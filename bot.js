@@ -361,6 +361,10 @@ const postDappRanking = async () => {
 const processData = data => {
   const lines = data.toString("utf8").split("\n");
   lines.forEach(line => {
+    if (line.charAt(0) !== '{') {
+      return 'not a game';
+    }
+
     try {
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
