@@ -378,7 +378,7 @@ const processData = data => {
             ).map((paid) => {
               console.log(paid);
               const [amount, token] = paid.split(' ');
-              return `${amount.toFixed(2)} ${token}`;
+              return `${Number(amount).toFixed(2)} ${token}`;
             }).join("\n")}!!!!*\n\nCongratulations ${parsedData.player}!`
           );
         }
