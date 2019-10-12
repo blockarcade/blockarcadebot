@@ -26,7 +26,7 @@ userdb.createReadStream()
       console.log(e);
     }
 
-    if (typeof user.iostAccount === 'undefined' || username === '@octalmage') {
+    if (typeof user.iostAccount === 'undefined' || username === '@octalmage' || username.trim() === '@gamblerking') {
       console.log('Skipping user:', user.iostAccount);
       return;
     }
@@ -61,17 +61,10 @@ userdb.createReadStream()
             console.log(e, username);
         })
       })
-    )
+    );
 
 
-    const filteredKeys = newKeys.filter(user => {
-      console.log('IS user gamblerking', user);
-      if (user !== '@gamblerking') {
-        return null;
-      }
-
-      return user;
-    }).filter(el => el != null);
+    const filteredKeys = newKeys.filter(el => el != null);
     const dropAmount = Math.floor(airdropAmount / filteredKeys.length);
 
     try {
