@@ -26,7 +26,7 @@ userdb.createReadStream()
       console.log(e);
     }
 
-    if (typeof user.iostAccount === 'undefined' || username === '@octalmage' || username.trim() === '@gamblerking') {
+    if (typeof user.iostAccount === 'undefined' || username === '@octalmage' || username.trim() === '@gamblerking' || username.trim() === '@gamblerk1ng') {
       console.log('Skipping user:', user.iostAccount);
       return;
     }
