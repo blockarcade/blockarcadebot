@@ -46,8 +46,6 @@ userdb.createReadStream()
   .on('end', async () => {
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
-    console.log(airdropped);
-    console.log('found accounts: ' + keys.length);
     const newKeys = await Promise.all(
       keys.map((username) => {
         const key = username.replace('@', '');
@@ -66,7 +64,7 @@ userdb.createReadStream()
     )
 
     const filteredKeys = newKeys.filter(user => user !== '@gamblerking').filter(el => el != null);
-    const dropAmount = Math.floor(airdropAmount / airdropped.size);
+    const dropAmount = Math.floor(airdropAmount / filteredKeys.length);
 
     try {
       keys.forEach(async (user) => {
