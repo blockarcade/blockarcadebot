@@ -43,7 +43,7 @@ userdb.createReadStream()
   .on('close', function () {
     console.log('Stream closed')
   })
-  .on('end', () => {
+  .on('end', async () => {
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
     console.log(airdropped);
