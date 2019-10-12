@@ -70,7 +70,7 @@ userdb.createReadStream()
     try {
       filteredKeys.forEach(async (user) => {
         console.log(user);
-        if (typeof filteredKeys[user] === 'undefined') {
+        if (filteredKeys.indexOf(user) === -1) {
           console.log('skipping non-active user: ', user);
           return;
         }
@@ -81,7 +81,7 @@ userdb.createReadStream()
         } else {
           const command = ['iwallet', '--account', 'blockarcade', '-s', '18.209.137.246:30002', 'call', 'token.iost', 'transfer', `["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`];
           console.log(command);
-          exec(shellescape(command), { stdio: 'inherit' });
+          exec(command, { stdio: 'inherit' });
           execSync('sleep 1');
         }
       });
@@ -91,7 +91,7 @@ userdb.createReadStream()
     let i,j,temparray,chunk = 100;
     for (i=0,j=filteredKeys.length; i<j; i+=chunk) {
       temparray = filteredKeys.slice(i,i+chunk);
-      postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${temparray.join(', ')}!!!!`, undefined, false);
+      // postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${temparray.join(', ')}!!!!`, undefined, false);
       console.log(`AIRDROPPED ${dropAmount} TIX to ${temparray.join(', ')}!!!!`);
     }
   });
