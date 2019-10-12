@@ -92,7 +92,7 @@ userdb.createReadStream()
     let i,j,temparray,chunk = 100;
     for (i=0,j=keys.length; i<j; i+=chunk) {
       temparray = keys.slice(i,i+chunk);
-      postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${temparray.join(', ')}!!!!`, undefined, false);
+      // postToTelegram(`AIRDROPPED ${dropAmount} $TIX to ${temparray.join(', ')}!!!!`, undefined, false);
       console.log(`AIRDROPPED ${dropAmount} TIX to ${temparray.join(', ')}!!!!`);
     }
   });
