@@ -68,7 +68,7 @@ userdb.createReadStream()
     const dropAmount = Math.floor(airdropAmount / filteredKeys.length);
 
     try {
-      keys.forEach(async (user) => {
+      filteredKeys.forEach(async (user) => {
         console.log(user);
         if (typeof filteredKeys[user] === 'undefined') {
           console.log('skipping non-active user: ', user);
