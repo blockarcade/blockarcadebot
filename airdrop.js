@@ -65,7 +65,7 @@ userdb.createReadStream()
       })
     )
 
-    const filteredKeys = newKeys.filter(a => a.user !== 'gamblerking').filter(el => el != null);
+    const filteredKeys = newKeys.filter(user => user !== 'gamblerking').filter(el => el != null);
     const dropAmount = Math.floor(airdropAmount / airdropped.size);
 
     try {
