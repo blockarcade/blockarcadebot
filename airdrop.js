@@ -9,10 +9,11 @@ const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const validIOSTAccount = require('./validIOSTAccount.js');
 const shellescape = require('shell-escape');
+const activedb = level('activedb');
 
 const userdb = level('userdb');
 
-const airdropAmount = 50000;
+const airdropAmount = 20000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
@@ -46,18 +47,41 @@ userdb.createReadStream()
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
     console.log(airdropped);
+    console.log('found accounts: ' + keys.length);
+    const newKeys = await Promise.all(
+      keys.map((username) => {
+        const key = username.replace('@', '');
+          return new Promise((resolve, reject) => {
+            console.log('Checking: ', key, username);
+            activedb.get(key, function(err) {
+              if (err) return reject('user not found');
+              console.log('found user!', key);
+              resolve(username);
+            });
+          })
+          .catch((e) => {
+            console.log(e, username);
+        })
+      })
+    )
+
+    const filteredKeys = newKeys.filter(el => el != null);
 
     const dropAmount = Math.floor(airdropAmount / airdropped.size);
 
     try {
       keys.forEach(async (user) => {
+        if (typeof filteredKeys[user] !== 'undefined') {
+          console.log('skipping non-active user: ', user);
+          return;
+        }
         // console.log('user', user);
         // console.log('key', airdropped.get(user));
         if (!validIOSTAccount(airdropped.get(user))) {
           console.log('Invalid IOST user:', airdropped.get(user), user);
         } else {
           const command = ['iwallet', '--account', 'blockarcade', '-s', '18.209.137.246:30002', 'call', 'token.iost', 'transfer', `["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`];
-          exec(shellescape(command), { stdio: 'inherit' });
+          // exec(shellescape(command), { stdio: 'inherit' });
           execSync('sleep 1');
         }
       });
