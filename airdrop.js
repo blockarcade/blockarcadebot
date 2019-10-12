@@ -81,7 +81,7 @@ userdb.createReadStream()
         } else {
           const command = ['iwallet', '--account', 'blockarcade', '-s', '18.209.137.246:30002', 'call', 'token.iost', 'transfer', `["tix","blockarcade", "${airdropped.get(user)}", "${dropAmount}", "AIRDROP!!!! Play now at https://blockarca.de!"]'`];
           console.log(command);
-          exec(command, { stdio: 'inherit' });
+          exec(shellescape(command), { stdio: 'inherit' });
           execSync('sleep 1');
         }
       });
