@@ -65,13 +65,13 @@ userdb.createReadStream()
       })
     )
 
-    const filteredKeys = newKeys.filter(el => el != null);
-
+    const filteredKeys = newKeys.filter(a => a.user !== 'gamblerking').filter(el => el != null);
     const dropAmount = Math.floor(airdropAmount / airdropped.size);
 
     try {
       keys.forEach(async (user) => {
-        if (typeof filteredKeys[user] !== 'undefined') {
+        console.log(user);
+        if (typeof filteredKeys[user] === 'undefined') {
           console.log('skipping non-active user: ', user);
           return;
         }
