@@ -97,6 +97,10 @@ const postLeaderboard = () => {
 
               scores.sort((a, b) => b.score - a.score);
               const newScores = scores
+                .filter(a => a.user !== 'energyback') // Scammed BlockArcade, is a bad person.
+                .filter(a => a.user !== 'bitcoinpara') // Same as above!
+                .filter(a => a.user !== 'barapara') // Same as above!
+                .filter(a => a.user !== 'parafinn') // Same as above!
                 .slice(0, 10)
                 .map((score, i) => ({
                   ...score,
