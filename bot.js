@@ -289,8 +289,6 @@ const postJackpotToTelegram = () => {
                             )} $TIX\n${numberWithCommas(
                               (iplayBalance / 10).toFixed(2)
                             )} $IPLAY\n${numberWithCommas(
-                              (iengyBalance / 10).toFixed(2)
-                            )} $IENGY\n${numberWithCommas(
                               (metxBalance / 10).toFixed(2)
                             )} $METX\n${numberWithCommas(
                               (lolBalance / 10).toFixed(2)
@@ -384,10 +382,9 @@ const processData = data => {
             }* just went for the *${jackpot} jackpot* and won\n*${JSON.parse(
               parsedData.paid
             ).map((paid) => {
-              console.log(paid);
               const [amount, token] = paid.split(' ');
-              return `${Number(amount).toFixed(2)} ${token}`;
-            }).join("\n")}!!!!*\n\nCongratulations ${parsedData.player}!`
+              return `${Number(amount).toFixed(2)} ${token.toUpperCase()}`;
+            }).join("\n")}*\n\nCongratulations ${parsedData.player}!`
           );
         }
       }
