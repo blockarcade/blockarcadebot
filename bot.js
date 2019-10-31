@@ -204,7 +204,7 @@ const postTixPriceToTelegram = () => {
     (_, response) => {
       const currentPrice = JSON.parse(response).data;
       postToTelegram(
-        `# Current $TIX Price: ${currentPrice} IOST\nTrade now at: https://www.iostdex.io`,
+        `Current $TIX Price: *${currentPrice} IOST*\nTrade now at: https://www.iostdex.io`,
         undefined,
         true
       );
