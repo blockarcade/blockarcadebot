@@ -197,6 +197,20 @@ const postRegisteredUsers = () => {
     });
 };
 
+const postTixPriceToTelegram = () => {
+  iostPOSTRequest(
+    "/getContractStorage",
+    {"id":"ContractBqYBBN1JuvvcmbaWkbSv6Pa334UJinM9vTPWPC2hvUDL","key":"price", "field": "tix", "by_longest_chain":true},
+    (_, response) => {
+      const currentPrice = JSON.parse(response).data;
+      postToTelegram(
+        `# Current $TIX Price: ${currentPrice} IOST\nTrade now at: https://www.iostdex.io`,
+        undefined,
+        true
+      );
+    });
+};
+
 const postJackpotToTelegram = () => {
   iostRequest(
     "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true",
@@ -384,7 +398,7 @@ const processData = data => {
             ).map((paid) => {
               const [amount, token] = paid.split(' ');
               return `${Number(amount).toFixed(2)} ${token.toUpperCase()}`;
-            }).join("\n")}*\n\nCongratulations ${parsedData.player}!`
+            }).join("\n")} *\n\nCongratulations ${parsedData.player}!`
           );
         }
       }
@@ -494,6 +508,9 @@ const processMessages = data => {
         case "/vote":
           postVotesToTelegram();
           deleteMessage("@blockarcade", line.message.message_id);
+          break;
+        case "/tix":
+          postTixPriceToTelegram();
           break;
         case "/rank":
           postDappRanking();
