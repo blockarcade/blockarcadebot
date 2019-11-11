@@ -56,6 +56,34 @@ const cashGifs = [
 
 let lastMessageId = 0;
 
+const formatNumber = (num) => numberWithCommas(Number(num).toFixed(2));
+
+const postLeaderboardWinners = async () => {
+  const scores = await new Promise((resolve) => {
+    iostPOSTRequest(
+      "/getContractStorage",
+      {
+        id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
+        key: "lastLeaderboardWinners",
+        by_longest_chain: true,
+      },
+      (_, response) => {
+        resolve(JSON.parse(response).data);
+      });
+  });
+
+  let body = "=== LAST LEADERBOARD WINNERS ===\n";
+  body += `🥇 ${scores[0].user} 💯 ${formatNumber(scores[0].score)} 💰 ${formatNumber(scores[0].reward)} $TIX\n`;
+  body += `🥈 ${scores[1].user} 💯 ${formatNumber(scores[1].score)} 💰 ${formatNumber(scores[1].reward)} $TIX\n`;
+  body += `🥉 ${scores[2].user} 💯 ${formatNumber(scores[2].score)} 💰 ${formatNumber(scores[2].reward)} $TIX\n`;
+
+  postToTelegram(
+    body,
+    undefined,
+    false
+  );
+};
+
 const postLeaderboard = () => {
   iostPOSTRequest(
     "/getContractStorage",
@@ -523,6 +551,9 @@ const processMessages = data => {
         case "/leaderboard":
           deleteMessage("@blockarcade", line.message.message_id);
           postLeaderboard();
+          break;
+        case "/winners":
+          postLeaderboardWinners();
           break;
         default:
           console.log("unreconized command", command);
