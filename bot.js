@@ -68,7 +68,7 @@ const postLeaderboardWinners = async () => {
         by_longest_chain: true,
       },
       (_, response) => {
-        resolve(JSON.parse(response).data);
+        resolve(JSON.parse(JSON.parse(response).data));
       });
   });
 
