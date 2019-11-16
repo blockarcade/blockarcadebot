@@ -41,6 +41,44 @@ cron.schedule("15 */8 * * *", () => {
   postLeaderboard();
 });
 
+cron.schedule("0 10 * * 1", () => {
+  console.log(getDate());
+  postLeaderboardWinners();
+});
+
+function timeDifference(current, previous) {
+  const msPerMinute = 60 * 1000;
+  const msPerHour = msPerMinute * 60;
+  const msPerDay = msPerHour * 24;
+  const msPerMonth = msPerDay * 30;
+  const msPerYear = msPerDay * 365;
+
+  const elapsed = current - previous;
+
+  if (elapsed < msPerMinute) {
+    return `${Math.round(elapsed / 1000)} seconds ago`;
+  }
+
+  if (elapsed < msPerHour) {
+    return `${Math.round(elapsed / msPerMinute)} minutes ago`;
+  }
+
+  if (elapsed < msPerDay) {
+    return `${Math.round(elapsed / msPerHour)} hours ago`;
+  }
+
+  if (elapsed < msPerMonth) {
+    return `${Math.round(elapsed / msPerDay)} days ago`;
+  }
+
+  if (elapsed < msPerYear) {
+    return `${Math.round(elapsed / msPerMonth)} months ago`;
+  }
+
+
+  return `${Math.round(elapsed / msPerYear)} years ago`;
+}
+
 console.log(getDate());
 
 const reportedBets = new Map();
@@ -73,9 +111,9 @@ const postLeaderboardWinners = async () => {
   });
 
   let body = "=== LAST LEADERBOARD WINNERS ===\n";
-  body += `🥇 ${scores[0].user}\n💯 ${formatNumber(scores[0].score)}\n💰 ${formatNumber(scores[0].reward)} $TIX\n\n`;
-  body += `🥈 ${scores[1].user}\n💯 ${formatNumber(scores[1].score)}\n💰 ${formatNumber(scores[1].reward)} $TIX\n\n`;
-  body += `🥉 ${scores[2].user}\n💯 ${formatNumber(scores[2].score)}\n💰 ${formatNumber(scores[2].reward)} $TIX\n\n`;
+  body += `🥇 ${scores[0].user} 💯\n💰${formatNumber(scores[0].score)}\n$TIX ${formatNumber(scores[0].reward)}\n\n`;
+  body += `🥈 ${scores[1].user} 💯\n💰${formatNumber(scores[1].score)}\n$TIX ${formatNumber(scores[1].reward)}\n\n`;
+  body += `🥉 ${scores[2].user} 💯\n💰${formatNumber(scores[2].score)}\n$TIX ${formatNumber(scores[2].reward)}\n\n`;
 
   postToTelegram(
     body,
@@ -239,7 +277,22 @@ const postTixPriceToTelegram = () => {
     });
 };
 
-const postJackpotToTelegram = () => {
+const postJackpotToTelegram = async () => {
+  const lastJackpot = await new Promise((resolve) => {
+    iostPOSTRequest(
+      "/getContractStorage",
+      {
+        id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+        key: "lastJackpot",
+        by_longest_chain: true,
+      },
+      (_, response) => {
+        resolve(JSON.parse(JSON.parse(response).data));
+      });
+  });
+
+  iostRequest('/getContractStorage/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lastJackpot')
+  getContractStorage(GetContractAddress(), 'lastJackpot');
   iostRequest(
     "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true",
     (err, response) => {
@@ -334,7 +387,7 @@ const postJackpotToTelegram = () => {
                               (metxBalance / 10).toFixed(2)
                             )} $METX\n${numberWithCommas(
                               (lolBalance / 10).toFixed(2)
-                            )} $LOL*\n\nWho's going to win it?\n\nPlay now at: https://blockarca.de`
+                            )} $LOL*\n\nWho's going to win it? Last jackpot won ${timeDifference(Date.now(), Math.ceil(lastJackpot.time * 0.000001))}.\n\nPlay now at: https://blockarca.de`
                           );
                         }
                       );
