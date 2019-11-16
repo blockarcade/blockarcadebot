@@ -291,8 +291,6 @@ const postJackpotToTelegram = async () => {
       });
   });
 
-  iostRequest('/getContractStorage/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lastJackpot')
-  getContractStorage(GetContractAddress(), 'lastJackpot');
   iostRequest(
     "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true",
     (err, response) => {
