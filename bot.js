@@ -118,9 +118,9 @@ const postLeaderboardWinners = async () => {
   });
 
   table.push(
-    ['🥇 1st', scores[0].user, scores[0].score, `${formatNumber(scores[0].reward)} $TIX`],
-    ['🥈 2nd', scores[1].user, scores[1].score, `${formatNumber(scores[1].reward)} $TIX`],
-    ['🥉 3rd', scores[2].user, scores[2].score, `${formatNumber(scores[2].reward)} $TIX`],
+    ['🥇 1st', scores[0].user, formatNumber(scores[0].score), `${formatNumber(scores[0].reward)} TIX`],
+    ['🥈 2nd', scores[1].user, formatNumber(scores[1].score), `${formatNumber(scores[1].reward)} TIX`],
+    ['🥉 3rd', scores[2].user, formatNumber(scores[2].score), `${formatNumber(scores[2].reward)} TIX`],
   );
 
   body += "```\n";
