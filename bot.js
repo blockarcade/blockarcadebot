@@ -113,14 +113,21 @@ const postLeaderboardWinners = async () => {
   });
 
   let body = "* LAST LEADERBOARD WINNERS *\n";
-  const table = new Table({
-    head: ['Place', 'Player', 'Score', 'Reward']
-  });
+  const table = new Table();
 
   table.push(
-    ['🥇 1st', scores[0].user, scores[0].score, `${formatNumber(scores[0].reward)} $TIX`],
-    ['🥈 2nd', scores[1].user, scores[1].score, `${formatNumber(scores[1].reward)} $TIX`],
-    ['🥉 3rd', scores[2].user, scores[2].score, `${formatNumber(scores[2].reward)} $TIX`],
+    ['Place','🥇 1st'],
+    ['Player', scores[0].user],
+    ['Score', scores[0].score],
+    ['Reward', `${formatNumber(scores[0].reward)} $TIX`],
+    ['Place','🥈 2nd'],
+    ['Player', scores[1].user],
+    ['Score', scores[1].score],
+    ['Reward', `${formatNumber(scores[1].reward)} $TIX`],
+    ['Place','🥉 3rd'],
+    ['Player', scores[2].user],
+    ['Score', scores[2].score],
+    ['Reward', `${formatNumber(scores[2].reward)} $TIX`],
   );
 
   body += "```\n";
@@ -269,7 +276,7 @@ const postRegisteredUsers = () => {
       const filteredKeys = newKeys.filter(el => el != null);
       
       postToTelegram(
-        `💰💰 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 25,000 $TIX airdrop happening on November 17th 💰💰\n\nTo be eligible you need to be active in this room within a week before the airdrop.`,
+        `💰💰 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 🦃 25,000 $TIX airdrop happening on November 28th 🦃\n\nTo be eligible you need to be active in this room within a week before the airdrop.`,
         undefined,
         true
       );
