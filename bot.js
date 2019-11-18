@@ -1,4 +1,5 @@
 const https = require("https");
+const Table = require('cli-table');
 const {
   postToTelegram,
   postGifToTelegram,
@@ -110,12 +111,20 @@ const postLeaderboardWinners = async () => {
       });
   });
 
-  let body = "# LAST LEADERBOARD WINNERS #\n";
-  body += 'Place | Player | Score | Reward\n';
-  body += '------|--------| ------|--------\n'
-  body += `🥇 1st | ${scores[0].user} | ${formatNumber(scores[0].score)} | ${formatNumber(scores[0].reward)} $TIX\n`;
-  body += `🥈 2nd | ${scores[1].user} | ${formatNumber(scores[1].score)} | ${formatNumber(scores[1].reward)} $TIX\n`;
-  body += `🥉 3rd | ${scores[2].user} | ${formatNumber(scores[2].score)} | ${formatNumber(scores[2].reward)} $TIX\n`;
+  let body = "* LAST LEADERBOARD WINNERS *\n";
+  const table = new Table({
+    head: ['Place', 'Player', 'Score', 'Reward']
+  });
+
+  table.push(
+    ['🥇 1st', scores[0].user, scores[0].score, `${formatNumber(scores[0].reward)} $TIX`],
+    ['🥈 2nd', scores[1].user, scores[1].score, `${formatNumber(scores[1].reward)} $TIX`],
+    ['🥉 3rd', scores[2].user, scores[2].score, `${formatNumber(scores[2].reward)} $TIX`],
+  );
+
+  body += "```\n";
+  body += table.toString();
+  body += "\n```";
 
   postToTelegram(
     body,
