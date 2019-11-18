@@ -1,5 +1,6 @@
 const https = require("https");
 const Table = require('cli-table');
+const stripAnsi = require('strip-ansi');
 const {
   postToTelegram,
   postGifToTelegram,
@@ -123,7 +124,7 @@ const postLeaderboardWinners = async () => {
   );
 
   body += "```\n";
-  body += table.toString();
+  body += stripAnsi(table.toString());
   body += "\n```";
 
   postToTelegram(

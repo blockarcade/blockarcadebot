@@ -25,6 +25,7 @@
     "node-fetch": "^2.6.0",
     "puppeteer": "^1.19.0",
     "request": "^2.88.0",
-    "shell-escape": "^0.2.0"
+    "shell-escape": "^0.2.0",
+    "strip-ansi": "^6.0.0"
   }
 }
