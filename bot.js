@@ -276,7 +276,7 @@ const postRegisteredUsers = () => {
       const filteredKeys = newKeys.filter(el => el != null);
       
       postToTelegram(
-        `🦃🦃 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 25,000 $TIX airdrop happening on November 28th 🦃🦃\n\nTo be eligible you need to be active in this room within a week before the airdrop.`,
+        `🦃🦃 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 25,000 $TIX airdrop happening on November 28th 🦃🦃\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop.`,
         undefined,
         true
       );
