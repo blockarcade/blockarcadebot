@@ -125,7 +125,8 @@ const postLeaderboardWinners = async () => {
 
   body += "```\n";
   body += stripAnsi(table.toString());
-  body += "\n```";
+  body += "\n```\n";
+  body += "Play now at: [BlockArca.de](https://blockarca.de)"
 
   postToTelegram(
     body,
