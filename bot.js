@@ -110,10 +110,11 @@ const postLeaderboardWinners = async () => {
       });
   });
 
-  let body = "=== LAST LEADERBOARD WINNERS ===\n";
-  body += `🥇 ${scores[0].user} 💯\n💰${formatNumber(scores[0].score)}\n$TIX ${formatNumber(scores[0].reward)}\n\n`;
-  body += `🥈 ${scores[1].user} 💯\n💰${formatNumber(scores[1].score)}\n$TIX ${formatNumber(scores[1].reward)}\n\n`;
-  body += `🥉 ${scores[2].user} 💯\n💰${formatNumber(scores[2].score)}\n$TIX ${formatNumber(scores[2].reward)}\n\n`;
+  let body = "```=== LAST LEADERBOARD WINNERS ===\n";
+  body += `🥇 ${scores[0].user}\n💰${formatNumber(scores[0].score)}\n$TIX ${formatNumber(scores[0].reward)}\n\n`;
+  body += `🥈 ${scores[1].user}\n💰${formatNumber(scores[1].score)}\n$TIX ${formatNumber(scores[1].reward)}\n\n`;
+  body += `🥉 ${scores[2].user}\n💰${formatNumber(scores[2].score)}\n$TIX ${formatNumber(scores[2].reward)}\n\n`;
+  body += "```";
 
   postToTelegram(
     body,
