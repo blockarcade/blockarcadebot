@@ -112,27 +112,48 @@ const postLeaderboardWinners = async () => {
       });
   });
 
-  let body = "* LAST LEADERBOARD WINNERS *\n";
+  let body = "* LAST LEADERBOARD WINNERS *\n\n";
   const table = new Table();
 
+  body += '* 🥇1st Place *\n';
   table.push(
-    ['Place','🥇 1st'],
     ['Player', scores[0].user],
     ['Score', scores[0].score],
-    ['Reward', `${formatNumber(scores[0].reward)} $TIX`],
-    ['Place','🥈 2nd'],
-    ['Player', scores[1].user],
-    ['Score', scores[1].score],
-    ['Reward', `${formatNumber(scores[1].reward)} $TIX`],
-    ['Place','🥉 3rd'],
-    ['Player', scores[2].user],
-    ['Score', scores[2].score],
-    ['Reward', `${formatNumber(scores[2].reward)} $TIX`],
+    ['Reward', `${formatNumber(scores[0].reward)} TIX`]
   );
 
   body += "```\n";
   body += stripAnsi(table.toString());
   body += "\n```\n";
+
+  table.length = 0;
+
+  body += '* 🥈2nd Place *\n';
+  table.push(
+    ['Player', scores[1].user],
+    ['Score', scores[1].score],
+    ['Reward', `${formatNumber(scores[1].reward)} TIX`]
+  );
+
+  body += "```\n";
+  body += stripAnsi(table.toString());
+  body += "\n```\n";
+
+  table.length = 0;
+
+  body += '* 🥉3rd Place *\n';
+  table.push(
+    ['Player', scores[2].user],
+    ['Score', scores[2].score],
+    ['Reward', `${formatNumber(scores[2].reward)} TIX`]
+  );
+
+  body += "```\n";
+  body += stripAnsi(table.toString());
+  body += "\n```\n";
+
+  table.length = 0;
+
   body += "Play now at: [BlockArca.de](https://blockarca.de)"
 
   postToTelegram(
