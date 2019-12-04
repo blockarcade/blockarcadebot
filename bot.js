@@ -417,12 +417,8 @@ const postJackpotToTelegram = async () => {
                             `*Major jackpot is up to:\n${numberWithCommas(
                               (iostBalance / 10).toFixed(2)
                             )} $IOST\n${numberWithCommas(
-                              (itrxBalance / 10).toFixed(2)
-                            )} $ITRX\n${numberWithCommas(
                               (tixBalance / 10).toFixed(2)
                             )} $TIX\n${numberWithCommas(
-                              (iplayBalance / 10).toFixed(2)
-                            )} $IPLAY\n${numberWithCommas(
                               (metxBalance / 10).toFixed(2)
                             )} $METX\n${numberWithCommas(
                               (lolBalance / 10).toFixed(2)
