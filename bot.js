@@ -1,4 +1,4 @@
-const https = require("https");
+const https = require('https');
 const Table = require('cli-table');
 const stripAnsi = require('strip-ansi');
 const {
@@ -19,7 +19,9 @@ const cron = require("node-cron");
 const level = require("level");
 const writeScores = require("./leaderboard.js");
 const renderRanking = require("./dappRanking.js");
+const renderRFLLeaders = require("./rflLeaders.js");
 const validIOSTAccount = require("./validIOSTAccount.js");
+const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
 
@@ -163,6 +165,15 @@ const postLeaderboardWinners = async () => {
   );
 };
 
+const postTopRFL = async () => {
+  await renderRFLLeaders();
+
+  postImage(
+    "./rflrank.png",
+    "Play now at: https://blockarca.de/qr"
+  );
+};
+
 const postLeaderboard = () => {
   iostPOSTRequest(
     "/getContractStorage",
@@ -297,7 +308,7 @@ const postRegisteredUsers = () => {
       const filteredKeys = newKeys.filter(el => el != null);
       
       postToTelegram(
-        `🦃🦃 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 25,000 $TIX airdrop happening on November 28th 🦃🦃\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop.`,
+        `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! No airdrop currently planned.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop.`,
         undefined,
         true
       );
@@ -639,6 +650,10 @@ const processMessages = data => {
         case "/leaderboard":
           deleteMessage("@blockarcade", line.message.message_id);
           postLeaderboard();
+          break;
+        case "/rfl":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postTopRFL();
           break;
         case "/winners":
           postLeaderboardWinners();

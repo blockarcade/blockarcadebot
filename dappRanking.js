@@ -25,9 +25,9 @@ const renderRanking = async () => {
   `,
   });
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, bannerElement);
+  // await page.evaluate(element => {
+  //   removeElement(element);
+  // }, bannerElement);
 
   await page.evaluate(element => {
     removeElement(element);
@@ -37,45 +37,62 @@ const renderRanking = async () => {
 
   const secondBannerElement = await page.$(".banner-sec");
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, secondBannerElement);
+  // await page.evaluate(element => {
+  //   removeElement(element);
+  // }, secondBannerElement);
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, bannerElement);
+  // await page.evaluate(element => {
+  //   removeElement(element);
+  // }, bannerElement);
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, suggestElement);
+  try {
+    await page.evaluate(element => {
+      removeElement(element);
+    }, suggestElement);
+  } catch (e) {
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, selectBarElement);
+  }
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, searchElement);
+  try {
+    await page.evaluate(element => {
+      removeElement(element);
+    }, selectBarElement);
+  }
+  catch (e) {
 
-  await page.evaluate(element => {
-    removeElement(element);
-  }, moreSelections);
+  }
+  try {
+    await page.evaluate(element => {
+      removeElement(element);
+    }, searchElement);
+  }
+  catch (e) {
+
+  }
+  try {
+    await page.evaluate(element => {
+      removeElement(element);
+    }, moreSelections);
+  }
+  catch (e) {
+
+  }
 
   await page.evaluate(() => {
-    const node = document.createElement('span');  
-    node.style.color = '#46196a';
+    const node = document.createElement('span');
+    node.style.color = '#000000';
     node.style.float = 'right';
     node.style.margin = '1em';
-    // node.style.fontWeight = 'bold';
-    const textnode = document.createTextNode('https://blockarca.de');
-    node.appendChild(textnode); 
-    document.querySelector(".mobile-menu-header").appendChild(node); 
+    node.style.fontWeight = 'bold';
+    const textnode = document.createTextNode('blockarca.de');
+    node.appendChild(textnode);
+    document.querySelector(".mobile-menu-header").appendChild(node);
   });
 
   await page.evaluate(() => {
     const tags = document.querySelectorAll(".dapp-item-for-mobile-outer");
     for (let i = 0; i < tags.length; i++) {
-      
+
       if (tags[i].textContent.indexOf("BlockArcade") !== -1) {
         const found = tags[i];
         found.firstChild.style.boxShadow = "0 10px 20px 0 rgba(237,92,158,.05), 0 5px 10px 0 rgba(237,92,158,.6)";
