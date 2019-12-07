@@ -180,7 +180,7 @@ const postTopJPT = async () => {
     });
   });
 
-  const result = [];
+  let result = [];
   
   Object.keys(users).forEach(user => {
     result.push({
