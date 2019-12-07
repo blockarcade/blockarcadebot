@@ -20,6 +20,7 @@ const level = require("level");
 const writeScores = require("./leaderboard.js");
 const renderRanking = require("./dappRanking.js");
 const renderRFLLeaders = require("./rflLeaders.js");
+const renderQR = require("./qr.js");
 const validIOSTAccount = require("./validIOSTAccount.js");
 const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
@@ -211,6 +212,15 @@ const postTopRFL = async () => {
 
   postImage(
     "./rflrank.png",
+    "Play now at: https://blockarca.de/qr"
+  );
+};
+
+const postQRTickets = async () => {
+  await renderQR();
+ 
+  postImage(
+    "./qr.png",
     "Play now at: https://blockarca.de/qr"
   );
 };
@@ -699,6 +709,10 @@ const processMessages = data => {
         case "/jpt":
           deleteMessage("@blockarcade", line.message.message_id);
           postTopJPT();
+          break;
+        case "/qr":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postQRTickets();
           break;
         case "/winners":
           postLeaderboardWinners();
