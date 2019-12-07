@@ -1,14 +1,13 @@
 const puppeteer = require("puppeteer");
-const getTopRFL = require('./getTopRFL');
 
-const renderRanking = async () => {
+const renderRanking = async (title, results) => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 550, height: 550 });
 
-  const results = await getTopRFL();
+  
   const html = `<html>
     <head>
       <style type="text/css">
@@ -43,13 +42,13 @@ const renderRanking = async () => {
     </head>
     <body>
     <center>
-    <h1>TOP RFL STAKERS</h1>
+    <h1>${title}</h1>
     <table>
     <thead>
         <tr>
             <th>Place</th>
             <th>Player</th>
-            <th>RFL Staked</th>
+            <th>Tokens</th>
         </tr>
     </thead>
     <tbody>

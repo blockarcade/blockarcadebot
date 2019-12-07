@@ -165,8 +165,49 @@ const postLeaderboardWinners = async () => {
   );
 };
 
+const postTopJPT = async () => {
+  const users = await new Promise(resolve => {
+    
+    iostPOSTRequest(
+    "/getContractStorage",
+    {
+      id: "Contract857r7Xc6fyLidKkW26vuDKvDVXZRx8SZbwYxpKfX8PV9",
+      key: "jptLedger",
+      by_longest_chain: true,
+    },
+    (err, response) => {
+      resolve(JSON.parse(JSON.parse(response).data));
+    });
+  });
+
+  const result = [];
+  
+  Object.keys(users).forEach(user => {
+    result.push({
+      user: user,
+      amount: users[user],
+    });
+  });
+
+  result = result.filter((item) => Number(item.amount) > 0)
+
+  result.sort((a, b) => {
+    return Number(b.amount) - Number(a.amount);
+  });
+  
+  result = result.slice(0, 10);
+
+  await renderRFLLeaders('TOP JPT HOLDERS', result);
+
+  postImage(
+    "./rflrank.png",
+    "Play now at: https://blockarca.de/qr"
+  );
+};
+
 const postTopRFL = async () => {
-  await renderRFLLeaders();
+  const results = await getTopRFL();
+  await renderRFLLeaders('TOP RFL STAKERS', results);
 
   postImage(
     "./rflrank.png",
@@ -654,6 +695,10 @@ const processMessages = data => {
         case "/rfl":
           deleteMessage("@blockarcade", line.message.message_id);
           postTopRFL();
+          break;
+        case "/jpt":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postTopJPT();
           break;
         case "/winners":
           postLeaderboardWinners();
