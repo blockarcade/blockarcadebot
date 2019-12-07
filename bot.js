@@ -234,7 +234,7 @@ const postLeaderboard = () => {
       by_longest_chain: true,
     },
     (err, response) => {
-      const totalReward = JSON.parse(response).data;
+      const totalReward = Number(JSON.parse(response).data) * 0.8;
 
       iostPOSTRequest(
         "/getContractStorage",
