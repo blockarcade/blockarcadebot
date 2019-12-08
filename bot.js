@@ -27,21 +27,23 @@ const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
 
-const welcomeText = `*Welcome to BlockArcade!*
+const welcomeText = `👋 *Welcome to BlockArcade!*
 
 Our goal with BlockArcade is to emulate the traditional arcade experience, just on the decentralized web! This vision includes arcade tokens using IOST, tickets for prizes using a custom token called TIX, and a prize counter to spend your tickets!
 
-*Links:*
+*Links:* 📄
     [BlockArcade Homepage](https://blockarca.de)
     [IOST Node](https://www.iostabc.com/account/blockarcade)
     [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
     [Prize Exchange](https://blockarca.de/exchange)
-    [Twitter](https://twitter.com/octalmage)
+    [Twitter](https://twitter.com/playblockarcade)
     [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
 
-*Games:*
+*Games:* 👾
     [StackWave](https://blockarca.de/stackwave)
-    [Quantum Raffle](https://blockarca.de/qr)`;
+    [Quantum Raffle](https://blockarca.de/qr)
+    
+Please share any questions or feedback in the room!`;
 
 const getDate = () => {
   const now = new Date();
