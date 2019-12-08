@@ -6,6 +6,7 @@ const {
   postGifToTelegram,
   deleteMessage,
   postImage,
+  postWelcomeMessage,
 } = require("./telegram");
 const { iostRequest, iostABCRequest, iostPOSTRequest } = require("./iost");
 const data = JSON.stringify({
@@ -25,6 +26,22 @@ const validIOSTAccount = require("./validIOSTAccount.js");
 const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
+
+const welcomeText = `*Welcome to BlockArcade!*
+
+Our goal with BlockArcade is to emulate the traditional arcade experience, just on the decentralized web! This vision includes arcade tokens using IOST, tickets for prizes using a custom token called TIX, and a prize counter to spend your tickets!
+
+*Links:*
+    [BlockArcade Homepage](https://blockarca.de)
+    [IOST Node](https://www.iostabc.com/account/blockarcade)
+    [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
+    [Prize Exchange](https://blockarca.de/exchange)
+    [Twitter](https://twitter.com/octalmage)
+    [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
+
+*Games:*
+    [StackWave](https://blockarca.de/stackwave)
+    [Quantum Raffle](https://blockarca.de/qr)`;
 
 const getDate = () => {
   const now = new Date();
@@ -695,13 +712,14 @@ const processMessages = data => {
           deleteMessage("@blockarcade", line.message.message_id);
           break;
         case "/info":
-          postToTelegram(
-            'Welcome! Learn more about BlockArcade here: https://telegra.ph/Welcome-to-BlockArcade-12-08-2',
-            undefined,
-            false,
-            undefined,
-            false,
-          );
+          // postToTelegram(
+          //   'Welcome! Learn more about BlockArcade here: https://telegra.ph/Welcome-to-BlockArcade-12-08-2',
+          //   undefined,
+          //   false,
+          //   undefined,
+          //   false,
+          // );
+          postWelcomeMessage(welcomeText);
           deleteMessage("@blockarcade", line.message.message_id);
           break;
         case "/count":

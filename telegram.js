@@ -90,6 +90,48 @@ const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_messa
   req.end();
 };
 
+const postWelcomeMessage = (text) => {
+  const keyboard = {
+    "inline_keyboard": [
+        [
+            {"text": "Play StackWave", "url": "https://blockarca.de/stackwave"},
+            {"text": "Play Quantum Raffle", "url": "https://blockarca.de/qr"},
+            {"text": "Whitepaper", "url": "https://blockarcade.github.io/whitepaper/whitepaper.pdf"},
+        ]
+    ]
+  };
+  const data = JSON.stringify({
+    chat_id: roomToPost,
+    text: text,
+    parse_mode: 'markdown',
+    reply_markup: JSON.stringify(keyboard),
+  });
+
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/${process.env.TELEGRAM_BOT}/sendMessage`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+    },
+  }
+
+  const req = https.request(options, (res) => {
+    res.on('data', (d) => {
+      process.stdout.write(d)
+    })
+  });
+
+  req.on('error', (error) => {
+    console.error(error)
+  });
+
+  req.write(data);
+  req.end();
+}
+
 const postGifToTelegram = (photo, caption) => {
   const options = {
     hostname: 'api.telegram.org',
@@ -111,4 +153,4 @@ const postGifToTelegram = (photo, caption) => {
   req.end();
 };
 
-module.exports = { postToTelegram, postGifToTelegram, editMessage, deleteMessage, postImage };
+module.exports = { postToTelegram, postGifToTelegram, editMessage, deleteMessage, postImage, postWelcomeMessage };
