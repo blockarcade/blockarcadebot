@@ -93,11 +93,9 @@ const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_messa
 const postWelcomeMessage = (text) => {
   const keyboard = {
     "inline_keyboard": [
-        [
-            {"text": "Play StackWave", "url": "https://blockarca.de/stackwave"},
-            {"text": "Play Quantum Raffle", "url": "https://blockarca.de/qr"},
-            {"text": "Vote for BlockArcade", "url": "https://www.iostabc.com/account/blockarcade"},
-        ]
+        [{"text": "Play StackWave", "url": "https://blockarca.de/stackwave"}],
+        [{"text": "Play Quantum Raffle", "url": "https://blockarca.de/qr"}],
+        [{"text": "Vote for BlockArcade", "url": "https://www.iostabc.com/account/blockarcade"}],
     ]
   };
   const data = JSON.stringify({
