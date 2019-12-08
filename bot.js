@@ -699,6 +699,8 @@ const processMessages = data => {
             'Welcome! Learn more about BlockArcade here: https://telegra.ph/Welcome-to-BlockArcade-12-08-2',
             undefined,
             false,
+            undefined,
+            false,
           );
           deleteMessage("@blockarcade", line.message.message_id);
           break;

@@ -58,7 +58,7 @@ const deleteMessage = (chatId, messageId) => {
   req.end();
 };
 
-const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_message_id) => {
+const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_message_id, disablePreview = true) => {
   let replyLine = '';
   let markdownLine = '';
 
@@ -73,7 +73,7 @@ const postToTelegram = (text, roomToPost = room, markdown = true, reply_to_messa
   const options = {
     hostname: 'api.telegram.org',
     port: 443,
-    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent(roomToPost)}&text=${encodeURIComponent(text)}${markdownLine}${replyLine}&disable_web_page_preview=true`,
+    path: `/${process.env.TELEGRAM_BOT}/sendMessage?chat_id=${encodeURIComponent(roomToPost)}&text=${encodeURIComponent(text)}${markdownLine}${replyLine}&disable_web_page_preview=${disablePreview}`,
     method: 'GET'
   }
 
