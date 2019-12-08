@@ -101,7 +101,7 @@ const postWelcomeMessage = (text) => {
     ]
   };
   const data = JSON.stringify({
-    chat_id: roomToPost,
+    chat_id: room,
     text: text,
     parse_mode: 'markdown',
     reply_markup: JSON.stringify(keyboard),
