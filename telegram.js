@@ -96,7 +96,7 @@ const postWelcomeMessage = (text) => {
         [
             {"text": "Play StackWave", "url": "https://blockarca.de/stackwave"},
             {"text": "Play Quantum Raffle", "url": "https://blockarca.de/qr"},
-            {"text": "Whitepaper", "url": "https://blockarcade.github.io/whitepaper/whitepaper.pdf"},
+            {"text": "Vote for BlockArcade", "url": "https://www.iostabc.com/account/blockarcade"},
         ]
     ]
   };
@@ -105,6 +105,7 @@ const postWelcomeMessage = (text) => {
     text: text,
     parse_mode: 'markdown',
     reply_markup: JSON.stringify(keyboard),
+    disable_web_page_preview: true,
   });
 
   const options = {
