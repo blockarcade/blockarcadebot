@@ -26,23 +26,6 @@ const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
 
-const welcomeText = `**Welcome to BlockArcade!**
-
-Our goal with BlockArcade is to emulate the traditional arcade experience, just on the decentralized web! This vision includes arcade tokens using IOST, tickets for prizes using a custom token called TIX, and a prize counter to spend your tickets!
-
-Links:
-* [BlockArcade Homepage](https://blockarca.de)
-* [IOST Node](https://www.iostabc.com/account/blockarcade)
-* [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
-* [Prize Exchange](https://blockarca.de/exchange)
-* [Twitter](https://twitter.com/octalmage)
-* [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
-
-Games:
-* [StackWave](https://blockarca.de/stackwave)
-* [Quantum Raffle](https://blockarca.de/qr)
-`;
-
 const getDate = () => {
   const now = new Date();
   return dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
@@ -711,11 +694,11 @@ const processMessages = data => {
           postDappRanking();
           deleteMessage("@blockarcade", line.message.message_id);
           break;
-        case "/welcome":
+        case "/info":
           postToTelegram(
-            welcomeText,
+            'Welcome! Learn more about BlockArcade here: https://telegra.ph/Welcome-to-BlockArcade-12-08-2',
             undefined,
-            true,
+            false,
           );
           deleteMessage("@blockarcade", line.message.message_id);
           break;
