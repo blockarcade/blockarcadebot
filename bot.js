@@ -38,10 +38,9 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [Prize Exchange](https://blockarca.de/exchange)
     [Twitter](https://twitter.com/playblockarcade)
     [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
+    [DEX](https://iostdex.io)
 
-*Games:*
-    [StackWave](https://blockarca.de/stackwave)
-    [Quantum Raffle](https://blockarca.de/qr)`;
+Please post any questions or feedback in the room!`;
 
 const getDate = () => {
   const now = new Date();
@@ -376,7 +375,7 @@ const postRegisteredUsers = () => {
       const filteredKeys = newKeys.filter(el => el != null);
       
       postToTelegram(
-        `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! No airdrop currently planned.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop.`,
+        `🎁🎁 There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP! 🎁🎁\n 100,000 $TIX airdrop happening on December 25th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop.`,
         undefined,
         true
       );
