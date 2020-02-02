@@ -727,7 +727,7 @@ const processMessages = data => {
                   "/getContractStorage",
                   {
                     id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
-                    key: `lasttime_${airdropped.get(line.message.from.username)}`,
+                    key: `lasttime_${airdropped.get(`@${line.message.from.username}`)}`,
                     by_longest_chain: true,
                   },
                   (_, response) => {
