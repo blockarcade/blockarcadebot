@@ -184,21 +184,21 @@ const postLeaderboardWinners = async () => {
 
 const postTopJPT = async () => {
   const users = await new Promise(resolve => {
-    
+
     iostPOSTRequest(
-    "/getContractStorage",
-    {
-      id: "Contract857r7Xc6fyLidKkW26vuDKvDVXZRx8SZbwYxpKfX8PV9",
-      key: "jptLedger",
-      by_longest_chain: true,
-    },
-    (err, response) => {
-      resolve(JSON.parse(JSON.parse(response).data));
-    });
+      "/getContractStorage",
+      {
+        id: "Contract857r7Xc6fyLidKkW26vuDKvDVXZRx8SZbwYxpKfX8PV9",
+        key: "jptLedger",
+        by_longest_chain: true,
+      },
+      (err, response) => {
+        resolve(JSON.parse(JSON.parse(response).data));
+      });
   });
 
   let result = [];
-  
+
   Object.keys(users).forEach(user => {
     result.push({
       user: user,
@@ -211,7 +211,7 @@ const postTopJPT = async () => {
   result.sort((a, b) => {
     return Number(b.amount) - Number(a.amount);
   });
-  
+
   result = result.slice(0, 10);
 
   await renderRFLLeaders('TOP JPT HOLDERS', result);
@@ -234,7 +234,7 @@ const postTopRFL = async () => {
 
 const postQRTickets = async () => {
   await renderQR();
- 
+
   postImage(
     "./qr.png",
     "Play now at: https://blockarca.de/qr"
@@ -344,10 +344,10 @@ const postRegisteredUsers = () => {
         console.log('no username', data);
       }
     })
-    .on("error", function(err) {
+    .on("error", function (err) {
       console.log("Oh my!", err);
     })
-    .on("close", function() {
+    .on("close", function () {
       console.log("Stream closed");
     })
     .on("end", async () => {
@@ -355,25 +355,56 @@ const postRegisteredUsers = () => {
       const keys = Array.from(airdropped.keys());
       console.log(airdropped);
       console.log('found accounts: ' + keys.length);
-      const newKeys = await Promise.all(
+      let newKeys = await Promise.all(
         keys.map((username) => {
           const key = username.replace('@', '');
-            return new Promise((resolve, reject) => {
-              console.log('Checking: ', key, username);
-              activedb.get(key, function(err) {
-                if (err) return reject('user not found');
-                console.log('found user!', key);
-                resolve(username);
-              });
-            })
+          return new Promise((resolve, reject) => {
+            console.log('Checking: ', key, username);
+            activedb.get(key, function (err) {
+              if (err) return reject('user not found');
+              console.log('found user!', key);
+              resolve(username);
+            });
+          })
             .catch((e) => {
               console.log(e, username);
             })
-          })
-      )
+        })
+      );
+
+      // Filter out users that haven't played.
+      newKeys = await Promise.all(newKeys.map(async (key) => {
+        const lasttime = await new Promise((resolve) => {
+          iostPOSTRequest(
+            "/getContractStorage",
+            {
+              id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+              key: `lasttime_${airdropped.get(key)}`,
+              by_longest_chain: true,
+            },
+            (_, response) => {
+              resolve(JSON.parse(response).data);
+            });
+        });
+
+        const current = new Date().getTime();
+
+        const timestamp = Math.ceil(lasttime * 0.000001);
+        const since = current - timestamp;
+        const week = 604800000;
+
+        const decay = Math.floor(since / week) * 1000;
+        if (decay < 1) {
+          return key;
+        }
+
+        return null;
+      }));
+
+      console.log(newKeys);
 
       const filteredKeys = newKeys.filter(el => el != null);
-      
+
       postToTelegram(
         `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n150,000 $TIX airdrop happening on Feburary 8th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play at least 1 StackWave game.`,
         undefined,
@@ -382,10 +413,12 @@ const postRegisteredUsers = () => {
     });
 };
 
+postRegisteredUsers();
+
 const postTixPriceToTelegram = () => {
   iostPOSTRequest(
     "/getContractStorage",
-    {"id":"ContractBqYBBN1JuvvcmbaWkbSv6Pa334UJinM9vTPWPC2hvUDL","key":"price", "field": "tix", "by_longest_chain":true},
+    { "id": "ContractBqYBBN1JuvvcmbaWkbSv6Pa334UJinM9vTPWPC2hvUDL", "key": "price", "field": "tix", "by_longest_chain": true },
     (_, response) => {
       const currentPrice = JSON.parse(response).data;
       postToTelegram(
@@ -472,39 +505,39 @@ const postJackpotToTelegram = async () => {
                             console.log(err);
                             return;
                           }
-    
+
                           const body = JSON.parse(response);
                           const iengyBalance = body.balance;
 
-                      iostRequest(
-                        "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true",
-                        (err, response) => {
-                          if (err) {
-                            console.log(err);
-                            return;
-                          }
+                          iostRequest(
+                            "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true",
+                            (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                return;
+                              }
 
-                          const body = JSON.parse(response);
-                          const lolBalance = body.balance;
-                          const cashGif =
-                            cashGifs[
-                              Math.floor(Math.random() * cashGifs.length)
-                            ];
-                          postGifToTelegram(
-                            cashGif,
-                            `*Major jackpot is up to:\n${numberWithCommas(
-                              (iostBalance / 10).toFixed(2)
-                            )} $IOST\n${numberWithCommas(
-                              (tixBalance / 10).toFixed(2)
-                            )} $TIX\n${numberWithCommas(
-                              (metxBalance / 10).toFixed(2)
-                            )} $METX\n${numberWithCommas(
-                              (lolBalance / 10).toFixed(2)
-                            )} $LOL*\n\nWho's going to win it? Last jackpot won ${timeDifference(Date.now(), Math.ceil(lastJackpot.time * 0.000001))}.\n\nPlay now at: https://blockarca.de`
+                              const body = JSON.parse(response);
+                              const lolBalance = body.balance;
+                              const cashGif =
+                                cashGifs[
+                                Math.floor(Math.random() * cashGifs.length)
+                                ];
+                              postGifToTelegram(
+                                cashGif,
+                                `*Major jackpot is up to:\n${numberWithCommas(
+                                  (iostBalance / 10).toFixed(2)
+                                )} $IOST\n${numberWithCommas(
+                                  (tixBalance / 10).toFixed(2)
+                                )} $TIX\n${numberWithCommas(
+                                  (metxBalance / 10).toFixed(2)
+                                )} $METX\n${numberWithCommas(
+                                  (lolBalance / 10).toFixed(2)
+                                )} $LOL*\n\nWho's going to win it? Last jackpot won ${timeDifference(Date.now(), Math.ceil(lastJackpot.time * 0.000001))}.\n\nPlay now at: https://blockarca.de`
+                              );
+                            }
                           );
-                        }
-                      );
-                    });
+                        });
                     }
                   );
                 }
@@ -535,9 +568,7 @@ const postVotesToTelegram = () => {
       "./vote.jpg",
       `BlockArcade's IOST node is already giving rewards as a parter node at ${numberWithCommas(
         totalVotes.toFixed(0)
-      )} votes!\n\nOnly ${numberWithCommas(
-        amountLeft.toFixed(0).toLocaleString()
-      )} votes left to become a servi node!\n\nVote now to receive an additional 25% of rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade`
+      )} votes!\n\nVote now to receive an additional 25% of rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade`
     );
   });
 };
@@ -586,7 +617,7 @@ const processData = data => {
           reportedBets.set(parsedData.paid, true);
           postToTelegram(
             `*${
-              parsedData.player
+            parsedData.player
             }* just went for the *${jackpot} jackpot* and won\n*${JSON.parse(
               parsedData.paid
             ).map((paid) => {
@@ -686,12 +717,43 @@ const processMessages = data => {
                 line.message.message_id
               );
             } else {
-              postToTelegram(
-                `You're on the list ${line.message.from.username}!`,
-                undefined,
-                false,
-                line.message.message_id
-              );
+
+              const lasttime = await new Promise((resolve) => {
+                iostPOSTRequest(
+                  "/getContractStorage",
+                  {
+                    id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+                    key: `lasttime_${airdropped.get(line.message.from.username)}`,
+                    by_longest_chain: true,
+                  },
+                  (_, response) => {
+                    resolve(JSON.parse(response).data);
+                  });
+              });
+
+              const current = new Date().getTime();
+
+              const timestamp = Math.ceil(lasttime * 0.000001);
+              const since = current - timestamp;
+              const week = 604800000;
+
+              const decay = Math.floor(since / week) * 1000;
+
+              if (decay > 0) {
+                postToTelegram(
+                  `You need to play a game this week to be included ${line.message.from.username}!`,
+                  undefined,
+                  false,
+                  line.message.message_id
+                );
+              } else {
+                postToTelegram(
+                  `You're on the list ${line.message.from.username}!`,
+                  undefined,
+                  false,
+                  line.message.message_id
+                );
+              }
             }
           });
           break;
