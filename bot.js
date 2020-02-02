@@ -741,7 +741,11 @@ const processMessages = data => {
               const since = current - timestamp;
               const week = 604800000;
 
-              const decay = Math.floor(since / week) * 1000;
+              let decay = Math.floor(since / week) * 1000;
+
+              if (lasttime === 'null') {
+                decay = 100;
+              }
 
               if (decay > 0) {
                 postToTelegram(
