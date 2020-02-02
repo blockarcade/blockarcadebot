@@ -310,110 +310,114 @@ const postLeaderboard = () => {
   );
 };
 
-let tasks = [];
+const getUsers = () => {
+  return new Promise((resolve) => {
+    const airdropped = new Map();
+    userdb
+      .createReadStream()
+      .on("data", async data => {
+        let username;
+        let user = {};
+        let key;
 
-const postRegisteredUsers = () => {
-  const airdropped = new Map();
-  userdb
-    .createReadStream()
-    .on("data", async data => {
-      let username;
-      let user = {};
-      let key;
+        console.log(data);
 
-      console.log(data);
-
-      try {
-        key = `${data.key.trim()}`;
-        username = `@${key}`;
-        user = JSON.parse(data.value);
-      } catch (e) {
-        console.log(e);
-      }
-
-      if (
-        typeof user.iostAccount === "undefined"
-      ) {
-        console.log("Skipping user:", data.key);
-        return;
-      }
-
-      if (user.iostAccount) {
-        airdropped.set(username, user.iostAccount);
-      } else {
-        console.log('no username', data);
-      }
-    })
-    .on("error", function (err) {
-      console.log("Oh my!", err);
-    })
-    .on("close", function () {
-      console.log("Stream closed");
-    })
-    .on("end", async () => {
-      console.log("Stream ended");
-      const keys = Array.from(airdropped.keys());
-      console.log(airdropped);
-      console.log('found accounts: ' + keys.length);
-      let newKeys = await Promise.all(
-        keys.map((username) => {
-          const key = username.replace('@', '');
-          return new Promise((resolve, reject) => {
-            console.log('Checking: ', key, username);
-            activedb.get(key, function (err) {
-              if (err) return reject('user not found');
-              console.log('found user!', key);
-              resolve(username);
-            });
-          })
-            .catch((e) => {
-              console.log(e, username);
-            })
-        })
-      );
-
-      // Filter out users that haven't played.
-      newKeys = await Promise.all(newKeys.map(async (key) => {
-        const lasttime = await new Promise((resolve) => {
-          iostPOSTRequest(
-            "/getContractStorage",
-            {
-              id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
-              key: `lasttime_${airdropped.get(key)}`,
-              by_longest_chain: true,
-            },
-            (_, response) => {
-              resolve(JSON.parse(response).data);
-            });
-        });
-
-        const current = new Date().getTime();
-
-        const timestamp = Math.ceil(lasttime * 0.000001);
-        const since = current - timestamp;
-        const week = 604800000;
-
-        const decay = Math.floor(since / week) * 1000;
-        if (decay < 1) {
-          return key;
+        try {
+          key = `${data.key.trim()}`;
+          username = `@${key}`;
+          user = JSON.parse(data.value);
+        } catch (e) {
+          console.log(e);
         }
 
-        return null;
-      }));
+        if (
+          typeof user.iostAccount === "undefined"
+        ) {
+          console.log("Skipping user:", data.key);
+          return;
+        }
 
-      console.log(newKeys);
+        if (user.iostAccount) {
+          airdropped.set(username, user.iostAccount);
+        } else {
+          console.log('no username', data);
+        }
+      })
+      .on("error", function (err) {
+        console.log("Oh my!", err);
+      })
+      .on("close", function () {
+        console.log("Stream closed");
+      })
+      .on("end", async () => {
+        resolve(airdropped);
+      });
+  });
 
-      const filteredKeys = newKeys.filter(el => el != null);
+}
 
-      postToTelegram(
-        `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n150,000 $TIX airdrop happening on Feburary 8th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play at least 1 StackWave game.`,
-        undefined,
-        true
-      );
+const postRegisteredUsers = async () => {
+  const airdropped = await getUsers();
+  console.log("Stream ended");
+  const keys = Array.from(airdropped.keys());
+  console.log(airdropped);
+  console.log('found accounts: ' + keys.length);
+  let newKeys = await Promise.all(
+    keys.map((username) => {
+      const key = username.replace('@', '');
+      return new Promise((resolve, reject) => {
+        console.log('Checking: ', key, username);
+        activedb.get(key, function (err) {
+          if (err) return reject('user not found');
+          console.log('found user!', key);
+          resolve(username);
+        });
+      })
+        .catch((e) => {
+          console.log(e, username);
+        })
+    })
+  );
+
+  // Filter out users that haven't played.
+  newKeys = await Promise.all(newKeys.map(async (key) => {
+    const lasttime = await new Promise((resolve) => {
+      iostPOSTRequest(
+        "/getContractStorage",
+        {
+          id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+          key: `lasttime_${airdropped.get(key)}`,
+          by_longest_chain: true,
+        },
+        (_, response) => {
+          resolve(JSON.parse(response).data);
+        });
     });
-};
 
-postRegisteredUsers();
+    const current = new Date().getTime();
+
+    const timestamp = Math.ceil(lasttime * 0.000001);
+    const since = current - timestamp;
+    const week = 604800000;
+
+    const decay = Math.floor(since / week) * 1000;
+    if (decay < 1) {
+      return key;
+    }
+
+    return null;
+  }));
+
+  console.log(newKeys);
+
+  const filteredKeys = newKeys.filter(el => el != null);
+
+  postToTelegram(
+    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n150,000 $TIX airdrop happening on Feburary 8th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play at least 1 StackWave game.`,
+    undefined,
+    true
+  );
+};
 
 const postTixPriceToTelegram = () => {
   iostPOSTRequest(
@@ -717,7 +721,7 @@ const processMessages = data => {
                 line.message.message_id
               );
             } else {
-
+              const airdropped = await getUsers();
               const lasttime = await new Promise((resolve) => {
                 iostPOSTRequest(
                   "/getContractStorage",
