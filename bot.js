@@ -708,7 +708,7 @@ const processMessages = data => {
           deleteMessage("@blockarcade", line.message.message_id);
           break;
         case "/check":
-          activedb.get(line.message.from.username, (err) => {
+          activedb.get(line.message.from.username, async (err) => {
             if (err) {
               postToTelegram(
                 "You're not on the list!",
