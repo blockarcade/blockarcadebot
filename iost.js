@@ -28,15 +28,15 @@ const iostRequest = (endpoint, callback) => {
 const iostPOSTRequest = (endpoint, data, callback) => {
   const stringData = JSON.stringify(data);
 
-const options = {
-  hostname: 'api.iost.io',
-  port: 443,
-  method: 'POST',
-  path: endpoint,
-};
-  
+  const options = {
+    hostname: 'api.iost.io',
+    port: 443,
+    method: 'POST',
+    path: endpoint,
+  };
+
   const req = https.request(options, (res) => {
-  let body = '';
+    let body = '';
     res.on('data', (d) => {
       body += d;
     });
@@ -79,4 +79,32 @@ const iostABCRequest = (endpoint, callback) => {
   req.end();
 };
 
-module.exports = { iostRequest, iostABCRequest, iostPOSTRequest };
+const waxRequest = (endpoint, data, callback) => {
+  const stringData = JSON.stringify(data);
+
+  const options = {
+    hostname: 'chain.wax.io',
+    port: 443,
+    method: 'POST',
+    path: endpoint,
+  };
+
+  const req = https.request(options, (res) => {
+    let body = '';
+    res.on('data', (d) => {
+      body += d;
+    });
+    res.on('end', () => {
+      callback(null, body);
+    });
+  });
+
+  req.on('error', (error) => {
+    callback(error);
+  });
+
+  req.write(stringData);
+  req.end();
+};
+
+module.exports = { iostRequest, iostABCRequest, iostPOSTRequest, waxRequest };

@@ -8,7 +8,7 @@ const {
   postImage,
   postWelcomeMessage,
 } = require("./telegram");
-const { iostRequest, iostABCRequest, iostPOSTRequest } = require("./iost");
+const { iostRequest, iostABCRequest, iostPOSTRequest, waxRequest } = require("./iost");
 const data = JSON.stringify({
   topics: ["CONTRACT_RECEIPT"],
   filter: {
@@ -111,6 +111,9 @@ const cashGifs = [
   "https://media.giphy.com/media/AslZw11iNXkkx33XZM/giphy.gif",
   "https://thumbs.gfycat.com/PrestigiousEmbellishedBlackrhino-size_restricted.gif",
   "https://thumbs.gfycat.com/LongAdeptAsiaticwildass-size_restricted.gif",
+  "https://gfycat.com/griminformalfieldmouse-chaeyoung-jeongyeon-fansign-dahyun-size_restricted.gif",
+  "https://gfycat.com/constanttensebasil-bojackhorseman-cartoon-netflix.gif",
+  "https://gfycat.com/unpleasantweightybrant-make-it-rain.gif",
 ];
 
 let lastMessageId = 0;
@@ -447,6 +450,19 @@ const postJackpotToTelegram = async () => {
       });
   });
 
+  const waxBalance = await new Promise((resolve) => {
+    waxRequest(
+      '/v1/chain/get_currency_balance',
+      {
+        code: 'eosio.token',
+        account: 'blockarcade1',
+        symbol: 'WAX'
+      },
+      (_, response) => {
+        resolve(JSON.parse(response)[0]);
+      });
+  });
+
   iostRequest(
     "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iost/true",
     (err, response) => {
@@ -501,9 +517,8 @@ const postJackpotToTelegram = async () => {
                       const body = JSON.parse(response);
                       const metxBalance = body.balance;
 
-
                       iostRequest(
-                        "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/iengy/true",
+                        "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true",
                         (err, response) => {
                           if (err) {
                             console.log(err);
@@ -511,37 +526,27 @@ const postJackpotToTelegram = async () => {
                           }
 
                           const body = JSON.parse(response);
-                          const iengyBalance = body.balance;
+                          const lolBalance = body.balance;
+                          const cashGif =
+                            cashGifs[
+                            Math.floor(Math.random() * cashGifs.length)
+                            ];
 
-                          iostRequest(
-                            "/getTokenBalance/ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt/lol/true",
-                            (err, response) => {
-                              if (err) {
-                                console.log(err);
-                                return;
-                              }
-
-                              const body = JSON.parse(response);
-                              const lolBalance = body.balance;
-                              const cashGif =
-                                cashGifs[
-                                Math.floor(Math.random() * cashGifs.length)
-                                ];
-                              postGifToTelegram(
-                                cashGif,
-                                `*Major jackpot is up to:\n${numberWithCommas(
-                                  (iostBalance / 10).toFixed(2)
-                                )} $IOST\n${numberWithCommas(
-                                  (tixBalance / 10).toFixed(2)
-                                )} $TIX\n${numberWithCommas(
-                                  (metxBalance / 10).toFixed(2)
-                                )} $METX\n${numberWithCommas(
-                                  (lolBalance / 10).toFixed(2)
-                                )} $LOL*\n\nWho's going to win it? Last jackpot won ${timeDifference(Date.now(), Math.ceil(lastJackpot.time * 0.000001))}.\n\nPlay now at: https://blockarca.de`
-                              );
-                            }
+                          postGifToTelegram(
+                            cashGif,
+                            `*IOST major jackpot is up to:\n${numberWithCommas(
+                              (iostBalance / 10).toFixed(2)
+                            )} $IOST\n${numberWithCommas(
+                              (tixBalance / 10).toFixed(2)
+                            )} $TIX\n${numberWithCommas(
+                              (metxBalance / 10).toFixed(2)
+                            )} $METX\n${numberWithCommas(
+                              (lolBalance / 10).toFixed(2)
+                            )} $LOL*\n\nWho's going to win it? Last jackpot won ${timeDifference(Date.now(), Math.ceil(lastJackpot.time * 0.000001))}.\n\nPlay now at: https://blockarca.de\n\n*WAX major jackpot is up to:\n${numberWithCommas((Number(waxBalance.split(' ')[0]) / 10).toFixed(2))} $WAX*\n\nPlay now at: https://wax.blockarca.de`
                           );
-                        });
+                        }
+                      );
+
                     }
                   );
                 }
@@ -553,6 +558,8 @@ const postJackpotToTelegram = async () => {
     }
   );
 };
+
+postJackpotToTelegram();
 
 const postVotesToTelegram = () => {
   iostABCRequest("/api/voters/blockarcade", (err, response) => {
