@@ -279,9 +279,11 @@ const postLeaderboard = () => {
             (err, response) => {
               const amounts = JSON.parse(response).datas;
 
-              const scores = users.map((user, i) => {
+              let scores = users.map((user, i) => {
                 return { user, score: amounts[i] };
               });
+
+              scores = scores.filter(score => !isNaN(score.score));
 
               scores.sort((a, b) => b.score - a.score);
               const newScores = scores
@@ -558,8 +560,6 @@ const postJackpotToTelegram = async () => {
     }
   );
 };
-
-postJackpotToTelegram();
 
 const postVotesToTelegram = () => {
   iostABCRequest("/api/voters/blockarcade", (err, response) => {
