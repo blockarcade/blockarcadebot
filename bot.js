@@ -40,6 +40,10 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
     [DEX](https://iostdex.io)
 
+*IOST Wallets*
+    [Jetstream (Desktop)](https://chrome.google.com/webstore/detail/jetstream/ijancdlmlahmfgcimhocmpibadokcdfc)
+    [TokenPocket (Mobile)](https://www.tokenpocket.pro)
+
 Please post any questions or feedback in the room!`;
 
 const getDate = () => {
