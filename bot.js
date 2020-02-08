@@ -342,7 +342,7 @@ const getUsers = () => {
           return;
         }
 
-        if (user.iostAccount) {
+        if (user.iostAccount && !airdropped.values().includes(user.iostAccount)) {
           airdropped.set(username, user.iostAccount);
         } else {
           console.log('no username', data);
