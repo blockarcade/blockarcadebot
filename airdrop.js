@@ -95,6 +95,10 @@ userdb.createReadStream()
     const filteredKeys = newKeys.filter(el => el != null);
     const dropAmount = Math.floor(airdropAmount / filteredKeys.length);
 
+    console.log(filteredKeys.length);
+
+    return
+
     try {
       filteredKeys.forEach(async (user) => {
         console.log(user);
