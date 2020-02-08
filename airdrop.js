@@ -1,6 +1,6 @@
 const https = require('https');
 const { postToTelegram, postGifToTelegram } = require('./telegram');
-const iostRequest = require('./iost');
+const { iostPOSTRequest } = require('./iost');
 const data = JSON.stringify({ "topics": ["CONTRACT_RECEIPT"], "filter": { "contract_id": "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt" } });
 const dateFormat = require('dateformat');
 const cron = require('node-cron');
@@ -13,7 +13,7 @@ const activedb = level('activedb');
 
 const userdb = level('userdb');
 
-const airdropAmount = 20000;
+const airdropAmount = 150000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
@@ -46,7 +46,7 @@ userdb.createReadStream()
   .on('end', async () => {
     console.log('Stream ended')
     const keys = Array.from( airdropped.keys() );
-    const newKeys = await Promise.all(
+    let newKeys = await Promise.all(
       keys.map((username) => {
         const key = username.replace('@', '');
           return new Promise((resolve, reject) => {
@@ -62,6 +62,34 @@ userdb.createReadStream()
         })
       })
     );
+
+    newKeys = await Promise.all(newKeys.map(async (key) => {
+      const lasttime = await new Promise((resolve) => {
+        iostPOSTRequest(
+          "/getContractStorage",
+          {
+            id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+            key: `lasttime_${airdropped.get(key)}`,
+            by_longest_chain: true,
+          },
+          (_, response) => {
+            resolve(JSON.parse(response).data);
+          });
+      });
+  
+      const current = new Date().getTime();
+  
+      const timestamp = Math.ceil(lasttime * 0.000001);
+      const since = current - timestamp;
+      const week = 604800000;
+  
+      const decay = Math.floor(since / week) * 1000;
+      if (decay < 1) {
+        return key;
+      }
+  
+      return null;
+    }));
 
 
     const filteredKeys = newKeys.filter(el => el != null);
