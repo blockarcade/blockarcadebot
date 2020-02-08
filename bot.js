@@ -341,7 +341,7 @@ const getUsers = () => {
           console.log("Skipping user:", data.key);
           return;
         }
-        const values = airdropped.map((v) => airdropped[v]);
+        const values = Object.keys(airdropped).map((v) => airdropped[v]);
         if (user.iostAccount && !values.includes(user.iostAccount)) {
           airdropped.set(username, user.iostAccount);
         } else {
