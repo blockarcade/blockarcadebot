@@ -44,6 +44,10 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [Jetstream (Desktop)](https://chrome.google.com/webstore/detail/jetstream/ijancdlmlahmfgcimhocmpibadokcdfc)
     [TokenPocket (Mobile)](https://www.tokenpocket.pro)
 
+*WAX Wallets*
+    [Scatter (Desktop)](https://get-scatter.com/)
+    [WAX Cloud Wallet (Mobile)](https://all-access.wax.io)
+
 Please post any questions or feedback in the room!`;
 
 const getDate = () => {
