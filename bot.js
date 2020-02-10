@@ -281,8 +281,6 @@ const postLeaderboard = () => {
         },
         async (err, response) => {
           const users = JSON.parse(JSON.parse(response).data);
-          console.log(users);
-
           const fields = users.map(user => {
             return { field: user, key: "issuedTIX" };
           });
@@ -332,8 +330,6 @@ const postLeaderboard = () => {
                   place: i + 1,
                   score: numberWithCommas(Number(score.score).toFixed(2)),
                 }));
-                console.log(newScores);
-                return;
 
               writeScores(
                 newScores,
