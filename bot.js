@@ -37,7 +37,6 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
     [Prize Exchange](https://blockarca.de/exchange)
     [Twitter](https://twitter.com/playblockarcade)
-    [TokenPocket](https://tokenpocket.pro) (IOST Wallet)
     [DEX](https://iostdex.io)
 
 *IOST Wallets*
