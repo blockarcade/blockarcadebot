@@ -658,11 +658,13 @@ const processMessages = data => {
   lines.result.forEach(line => {
     lastMessageId = line.update_id;
 
-    if (line.message && typeof line.message.new_chat_members !== "undefined") {
-      console.log(line.message.new_chat_members);
-      postInstructionsToTelegram(line.message.new_chat_members[0].username);
-      return;
-    }
+    // TODO: Might need to modify this for WAX.
+    // if (line.message && typeof line.message.new_chat_members !== "undefined") {
+    //   console.log(line.message.new_chat_members);
+    //   postInstructionsToTelegram(line.message.new_chat_members[0].username);
+    //   return;
+    // }
+    
 
     try {
       const room = `@${line.message.chat.username}`;
@@ -682,7 +684,6 @@ const processMessages = data => {
         .split(" ");
       switch (command.toLowerCase()) {
         case "/iost":
-          const user = line.message.from.username;
           if (args) {
             if (!user) {
               postToTelegram(
@@ -718,6 +719,26 @@ const processMessages = data => {
             deleteMessage("@blockarcade", line.message.message_id);
           }
           break;
+        case "/wax":
+            if (args) {
+              if (!user) {
+                postToTelegram(
+                  "Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one"
+                );
+              } else {
+                waxChanges.set(user, {
+                  username: args,
+                  message_id: line.message.message_id,
+                  room,
+                });
+              }
+  
+              deleteMessage("@blockarcade", line.message.message_id);
+            } else {
+              postInstructionsToTelegram(user);
+              deleteMessage("@blockarcade", line.message.message_id);
+            }
+            break;
         case "/jackpot":
           postJackpotToTelegram();
           deleteMessage("@blockarcade", line.message.message_id);
@@ -838,6 +859,48 @@ const processMessages = data => {
         );
         userdb.put(user, JSON.stringify({ iostAccount: change.username }));
       });
+
+
+      changes.forEach((change, user) => {
+        console.log(user, change);
+        const record = new Promise((resolve) => {
+          userdb.get(user, async (err, value) => {
+            if (err) {
+              resolve({});
+              return;
+            }
+
+            resolve(value);
+          });
+        });
+        postToTelegram(
+          `Thanks for signing up @${user}! Your IOST account is registered and we deleted your message.`,
+          changes.room,
+          false
+        );
+        userdb.put(user, JSON.stringify({ ...record, iostAccount: change.username }));
+      });
+
+      waxChanges.forEach((change, user) => {
+        console.log(user, change);
+        const record = new Promise((resolve) => {
+          userdb.get(user, async (err, value) => {
+            if (err) {
+              resolve({});
+              return;
+            }
+
+            resolve(value);
+          });
+        });
+        postToTelegram(
+          `Thanks for signing up @${user}! Your WAX account is registered and we deleted your message.`,
+          changes.room,
+          false
+        );
+        userdb.put(user, JSON.stringify({ ...record, waxAccount: change.username }));
+      });
+
     } catch (e) {
       console.log(e);
     }
