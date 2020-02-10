@@ -636,6 +636,23 @@ const postInstructionsToTelegram = user => {
   // }, 1000);
 };
 
+const postWAXInstructionsToTelegram = user => {
+  let teleUser = "";
+  if (user) {
+    teleUser = ` @${user}`;
+  }
+
+  postToTelegram(
+    `Welcome${teleUser}! Tell the bot your WAX account name using "/wax accountname" to participate in airdrops!`,
+    undefined,
+    false
+  );
+
+  // setTimeout(() => {
+  //   postToTelegram('/iost YOUR IOST ACCOUNT');
+  // }, 1000);
+};
+
 const postDappRanking = async () => {
   await renderRanking();
 
@@ -767,7 +784,7 @@ const processMessages = data => {
   
               deleteMessage("@blockarcade", line.message.message_id);
             } else {
-              postInstructionsToTelegram(user);
+              postWAXInstructionsToTelegram(user);
               deleteMessage("@blockarcade", line.message.message_id);
             }
             break;
