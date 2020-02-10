@@ -651,6 +651,7 @@ const processData = data => {
 const processMessages = data => {
   const lines = JSON.parse(data.toString("utf8"));
   const changes = new Map();
+  const waxChanges = new Map();
   if (!lines.result) {
     return;
   }
