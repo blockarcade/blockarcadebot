@@ -6,7 +6,7 @@ const renderQR = async () => {
   });
   const page = await browser.newPage();
   await page.goto("https://blockarca.de/qr/widget");
-  await page.setViewport({ width: 600, height: 420 });
+  await page.setViewport({ width: 600, height: 332 });
 
   await page.waitForSelector('#ready-to-go');
 
