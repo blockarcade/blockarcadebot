@@ -248,6 +248,19 @@ const postQRTickets = async () => {
   );
 };
 
+function chunk(arr, len) {
+
+  var chunks = [],
+      i = 0,
+      n = arr.length;
+
+  while (i < n) {
+    chunks.push(arr.slice(i, i += len));
+  }
+
+  return chunks;
+}
+
 const postLeaderboard = () => {
   iostPOSTRequest(
     "/getContractStorage",
@@ -266,23 +279,41 @@ const postLeaderboard = () => {
           key: "issuedTIXUsers",
           by_longest_chain: true,
         },
-        (err, response) => {
+        async (err, response) => {
           const users = JSON.parse(JSON.parse(response).data);
+          console.log(users);
 
           const fields = users.map(user => {
             return { field: user, key: "issuedTIX" };
           });
 
+          const chunks = chunk(fields, 50);
+
+          const response2 = await new Promise((resolve) => {
+            iostPOSTRequest(
+              "/getBatchContractStorage",
+              {
+                id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
+                key_fields: chunks[1],
+                by_longest_chain: true,
+              },
+              (_, response) => {
+                resolve(response);
+              });
+          });
+
+          const amounts2 = JSON.parse(response2).datas;
           iostPOSTRequest(
             "/getBatchContractStorage",
             {
               id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
-              key_fields: fields,
+              key_fields: chunks[0],
               by_longest_chain: true,
             },
             (err, response) => {
-              const amounts = JSON.parse(response).datas;
-
+              
+              const amounts = (JSON.parse(response).datas).concat(amounts2);
+              console.log(amounts);
               let scores = users.map((user, i) => {
                 return { user, score: amounts[i] };
               });
@@ -301,6 +332,8 @@ const postLeaderboard = () => {
                   place: i + 1,
                   score: numberWithCommas(Number(score.score).toFixed(2)),
                 }));
+                console.log(newScores);
+                return;
 
               writeScores(
                 newScores,
@@ -318,6 +351,8 @@ const postLeaderboard = () => {
     }
   );
 };
+
+postLeaderboard();
 
 const getUsers = () => {
   return new Promise((resolve) => {
