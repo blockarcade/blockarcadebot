@@ -615,9 +615,9 @@ const postVotesToTelegram = () => {
 
     postImage(
       "./vote.jpg",
-      `BlockArcade's IOST node is already giving rewards as a parter node at ${numberWithCommas(
+      `BlockArcade's IOST node is giving rewards as a block producing node at ${numberWithCommas(
         totalVotes.toFixed(0)
-      )} votes!\n\nVote now to receive an additional 25% of rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade`
+      )} votes!\n\nVote now to receive an additional 25% of voter rewards paid in $TIX daily at:\nhttps://iostabc.com/account/blockarcade\n\n25% of block rewards will be paid in $TIX weekly.`
     );
   });
 };
