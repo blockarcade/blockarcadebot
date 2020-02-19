@@ -15,6 +15,13 @@ const data = JSON.stringify({
     contract_id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
   },
 });
+
+const qrData = JSON.stringify({
+  topics: ["CONTRACT_RECEIPT"],
+  filter: {
+    contract_id: "Contract857r7Xc6fyLidKkW26vuDKvDVXZRx8SZbwYxpKfX8PV9",
+  },
+});
 const dateFormat = require("dateformat");
 const cron = require("node-cron");
 const level = require("level");
@@ -254,8 +261,8 @@ const postQRTickets = async () => {
 function chunk(arr, len) {
 
   var chunks = [],
-      i = 0,
-      n = arr.length;
+    i = 0,
+    n = arr.length;
 
   while (i < n) {
     chunks.push(arr.slice(i, i += len));
@@ -312,7 +319,7 @@ const postLeaderboard = () => {
               by_longest_chain: true,
             },
             (err, response) => {
-              
+
               const amounts = (JSON.parse(response).datas).concat(amounts2);
               console.log(amounts);
               let scores = users.map((user, i) => {
@@ -350,8 +357,6 @@ const postLeaderboard = () => {
     }
   );
 };
-
-postLeaderboard();
 
 const getUsers = () => {
   return new Promise((resolve) => {
@@ -699,6 +704,27 @@ const processData = data => {
   });
 };
 
+const processQRData = data => {
+  const lines = data.toString("utf8").split("\n");
+  lines.forEach(line => {
+    if (line.charAt(0) !== '{') {
+      return 'not a game';
+    }
+
+    try {
+      const parsedLine = JSON.parse(line);
+      const parsedData = JSON.parse(parsedLine.result.event.data);
+      console.log(parsedData);
+      postToTelegram(
+        `*${parsedData.player}* just won *${parsedData.amount} $TIX* from the ${parsedData.raffle} Quantum Raffle!\n\nPlay now at: https://blockarca.de/qr`
+      );
+
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
+
 const processMessages = data => {
   const lines = JSON.parse(data.toString("utf8"));
   const changes = new Map();
@@ -716,7 +742,7 @@ const processMessages = data => {
     //   postInstructionsToTelegram(line.message.new_chat_members[0].username);
     //   return;
     // }
-    
+
 
     try {
       const room = `@${line.message.chat.username}`;
@@ -772,25 +798,25 @@ const processMessages = data => {
           }
           break;
         case "/wax":
-            if (args) {
-              if (!user) {
-                postToTelegram(
-                  "Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one"
-                );
-              } else {
-                waxChanges.set(user, {
-                  username: args,
-                  message_id: line.message.message_id,
-                  room,
-                });
-              }
-  
-              deleteMessage("@blockarcade", line.message.message_id);
+          if (args) {
+            if (!user) {
+              postToTelegram(
+                "Please set a Telegram username before interacting with our bot! https://telegram.org/faq#q-what-are-usernames-how-do-i-get-one"
+              );
             } else {
-              postWAXInstructionsToTelegram(user);
-              deleteMessage("@blockarcade", line.message.message_id);
+              waxChanges.set(user, {
+                username: args,
+                message_id: line.message.message_id,
+                room,
+              });
             }
-            break;
+
+            deleteMessage("@blockarcade", line.message.message_id);
+          } else {
+            postWAXInstructionsToTelegram(user);
+            deleteMessage("@blockarcade", line.message.message_id);
+          }
+          break;
         case "/jackpot":
           postJackpotToTelegram();
           deleteMessage("@blockarcade", line.message.message_id);
@@ -995,6 +1021,42 @@ const waitForRequests = callback => {
   req.end();
 };
 
+const waitForQRRequests = callback => {
+  console.log(getDate(), "waiting for qr events");
+  const options = {
+    hostname: "api.iost.io",
+    port: 443,
+    path: "/subscribe",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": qrData.length,
+    },
+  };
+
+  const req = https.request(options, res => {
+    let temp = "";
+    res.on("data", d => {
+      console.log("got data");
+      temp += d;
+    });
+
+    res.on("end", () => {
+      console.log("closed");
+      processQRData(temp);
+      setTimeout(waitForQRRequests, 1000);
+    });
+  });
+
+  req.on("error", error => {
+    console.error(error);
+    callback();
+  });
+
+  req.write(qrData);
+  req.end();
+};
+
 const waitForBotMessage = () => {
   console.log(getDate(), "waiting for messages");
   const options = {
@@ -1033,6 +1095,7 @@ const waitForBotMessage = () => {
 
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
+waitForQRRequests();
 waitForBotMessage();
 
 function numberWithCommas(x) {
