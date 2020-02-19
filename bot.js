@@ -1004,12 +1004,10 @@ const waitForRequests = callback => {
   const req = https.request(options, res => {
     let data = "";
     res.on("data", d => {
-      console.log("got data");
       data += d;
     });
 
     res.on("end", () => {
-      console.log("closed");
       processData(data);
       setTimeout(waitForRequests, 1000);
     });
