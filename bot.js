@@ -716,7 +716,7 @@ const processQRData = data => {
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData);
 
-      if (typeof parsedData.player !== 'undefined') {
+      if (typeof parsedData.player === 'undefined') {
         throw 'not a raffle';
       }
       postToTelegram(
@@ -990,7 +990,6 @@ const processMessages = data => {
 };
 
 const waitForRequests = callback => {
-  console.log(getDate(), "waiting for events");
   const options = {
     hostname: "api.iost.io",
     port: 443,
@@ -1026,7 +1025,6 @@ const waitForRequests = callback => {
 };
 
 const waitForQRRequests = callback => {
-  console.log(getDate(), "waiting for qr events");
   const options = {
     hostname: "api.iost.io",
     port: 443,
@@ -1062,7 +1060,6 @@ const waitForQRRequests = callback => {
 };
 
 const waitForBotMessage = () => {
-  console.log(getDate(), "waiting for messages");
   const options = {
     hostname: "api.telegram.org",
     port: 443,
