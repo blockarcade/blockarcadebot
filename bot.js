@@ -1037,12 +1037,10 @@ const waitForQRRequests = callback => {
   const req = https.request(options, res => {
     let temp = "";
     res.on("data", d => {
-      console.log("got data");
       temp += d;
     });
 
     res.on("end", () => {
-      console.log("closed");
       processQRData(temp);
       setTimeout(waitForQRRequests, 1000);
     });
@@ -1072,12 +1070,10 @@ const waitForBotMessage = () => {
   const req = https.request(options, res => {
     let data = "";
     res.on("data", d => {
-      console.log("got data");
       data += d;
     });
 
     res.on("end", () => {
-      console.log("closed");
       processMessages(data);
       setTimeout(waitForBotMessage, 1000);
     });
