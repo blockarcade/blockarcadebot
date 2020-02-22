@@ -74,6 +74,4 @@ const renderRanking = async (title, results) => {
   await browser.close();
 };
 
-renderRanking();
-
 module.exports = renderRanking;

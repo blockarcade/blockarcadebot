@@ -33,6 +33,7 @@ const validIOSTAccount = require("./validIOSTAccount.js");
 const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
+const watchWAX = require('./watchWAX');
 
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
@@ -1088,10 +1089,18 @@ const waitForBotMessage = () => {
   req.end();
 };
 
+
+const waitForWAXRequests = async () => {
+  await watchWAX();
+  setTimeout(waitForWAXRequests, 1000);
+}
+ 
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
 waitForQRRequests();
+waitForWAXRequests();
 waitForBotMessage();
+
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

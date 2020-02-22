@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/blockarcade/blockarcadebot#readme",
   "dependencies": {
+    "@dfuse/client": "^0.3.8",
     "cli-table": "^0.3.1",
     "dateformat": "^3.0.3",
     "jimp": "^0.6.4",
@@ -26,6 +27,7 @@
     "puppeteer": "^1.19.0",
     "request": "^2.88.0",
     "shell-escape": "^0.2.0",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^6.0.0",
+    "ws": "^7.2.1"
   }
 }
