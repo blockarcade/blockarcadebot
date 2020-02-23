@@ -34,6 +34,7 @@ const getTopRFL = require("./getTopRFL.js");
 const userdb = level("userdb");
 const activedb = level("activedb");
 const watchWAX = require('./watchWAX');
+const waitForCRRequests = require('./waitForCRRequests');
 
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
@@ -1099,6 +1100,7 @@ const waitForWAXRequests = async () => {
 waitForRequests();
 waitForQRRequests();
 waitForWAXRequests();
+waitForCRRequests();
 waitForBotMessage();
 
 
