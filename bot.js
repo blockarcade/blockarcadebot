@@ -36,6 +36,25 @@ const activedb = level("activedb");
 const watchWAX = require('./watchWAX');
 const waitForCRRequests = require('./waitForCRRequests');
 
+const banned = [
+  'a2973x2378',
+  'a5732x1670',
+  'a4619x8681',
+  'a1435x7760',
+  'a1781x1805',
+  'a4473x6800',
+  'a4744x2067',
+  'a7182x1127',
+  'a3433x2217',
+  'a1473x3196',
+  'officialmgo',
+  'cp1987',
+  'energyback',
+  'bitcoinpara',
+  'barapara',
+  'parafinn',
+];
+
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
 Our goal with BlockArcade is to emulate the traditional arcade experience, just on the decentralized web! This vision includes arcade tokens using IOST, tickets for prizes using a custom token called TIX, and a prize counter to spend your tickets!
@@ -332,11 +351,7 @@ const postLeaderboard = () => {
 
               scores.sort((a, b) => b.score - a.score);
               const newScores = scores
-                .filter(a => a.user !== 'energyback') // Scammed BlockArcade, is a bad person.
-                .filter(a => a.user !== 'bitcoinpara') // Same as above!
-                .filter(a => a.user !== 'barapara') // Same as above!
-                .filter(a => a.user !== 'parafinn') // Same as above!
-                .slice(0, 10)
+                .filter(a => banned.indexOf(a.user) === -1) 
                 .map((score, i) => ({
                   ...score,
                   place: i + 1,
