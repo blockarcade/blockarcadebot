@@ -765,6 +765,8 @@ const processMessages = data => {
 
       const [command, args] = line.message.text
         .replace("@BlockArcadeBot", "")
+        .replace("@", "")
+        .replace("@null", "")
         .split(" ");
       switch (command.toLowerCase()) {
         case "/iost":
