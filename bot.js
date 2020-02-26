@@ -37,6 +37,17 @@ const watchWAX = require('./watchWAX');
 const waitForCRRequests = require('./waitForCRRequests');
 
 const banned = [
+  'a8737x3943',
+  'a4544x4053',
+  'a1577x4838',
+  'a4492x1267',
+  'a2603x1742',
+  'a3187x5834',
+  'a7506x2328',
+  'a3387x2212',
+  'a2935x2499',
+  'ballblaster',
+  'a2553x6759',
   'a2973x2378',
   'a5732x1670',
   'a4619x8681',
@@ -351,7 +362,8 @@ const postLeaderboard = () => {
 
               scores.sort((a, b) => b.score - a.score);
               const newScores = scores
-                .filter(a => banned.indexOf(a.user) === -1) 
+                .filter(a => banned.indexOf(a.user) === -1) // Scammed BlockArcade, is a bad person.
+                .slice(0, 10)
                 .map((score, i) => ({
                   ...score,
                   place: i + 1,
