@@ -36,36 +36,6 @@ const activedb = level("activedb");
 const watchWAX = require('./watchWAX');
 const waitForCRRequests = require('./waitForCRRequests');
 
-const banned = [
-  'a8737x3943',
-  'a4544x4053',
-  'a1577x4838',
-  'a4492x1267',
-  'a2603x1742',
-  'a3187x5834',
-  'a7506x2328',
-  'a3387x2212',
-  'a2935x2499',
-  'ballblaster',
-  'a2553x6759',
-  'a2973x2378',
-  'a5732x1670',
-  'a4619x8681',
-  'a1435x7760',
-  'a1781x1805',
-  'a4473x6800',
-  'a4744x2067',
-  'a7182x1127',
-  'a3433x2217',
-  'a1473x3196',
-  'officialmgo',
-  'cp1987',
-  'energyback',
-  'bitcoinpara',
-  'barapara',
-  'parafinn',
-];
-
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
 Our goal with BlockArcade is to emulate the traditional arcade experience, just on the decentralized web! This vision includes arcade tokens using IOST, tickets for prizes using a custom token called TIX, and a prize counter to spend your tickets!
@@ -303,7 +273,21 @@ function chunk(arr, len) {
   return chunks;
 }
 
-const postLeaderboard = () => {
+const postLeaderboard = async () => {
+
+  const blacklist = await new Promise((resolve) => {
+    iostPOSTRequest(
+      "/getContractStorage",
+      {
+        id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
+        key: "blacklist",
+        by_longest_chain: true,
+      },
+      (_, response) => {
+        resolve(JSON.parse(JSON.parse(response).data));
+      });
+  });
+
   iostPOSTRequest(
     "/getContractStorage",
     {
@@ -362,7 +346,7 @@ const postLeaderboard = () => {
 
               scores.sort((a, b) => b.score - a.score);
               const newScores = scores
-                .filter(a => banned.indexOf(a.user) === -1) // Scammed BlockArcade, is a bad person.
+                .filter(a => blacklist.indexOf(a.user) === -1) // Scammed BlockArcade, is a bad person.
                 .slice(0, 10)
                 .map((score, i) => ({
                   ...score,
@@ -386,6 +370,8 @@ const postLeaderboard = () => {
     }
   );
 };
+
+postLeaderboard();
 
 const getUsers = () => {
   return new Promise((resolve) => {
