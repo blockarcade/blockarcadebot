@@ -371,8 +371,6 @@ const postLeaderboard = async () => {
   );
 };
 
-postLeaderboard();
-
 const getUsers = () => {
   return new Promise((resolve) => {
     const airdropped = new Map();
