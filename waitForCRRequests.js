@@ -10,6 +10,8 @@ const crData = JSON.stringify({
   },
 });
 
+const reportedGames = new Map();
+
 function formatTime(dt) {
   var minutes = Math.floor(dt / 60);
   var seconds = Math.floor(dt - (minutes * 60));
@@ -24,20 +26,27 @@ const processCRData = data => {
   const lines = data.toString("utf8").split("\n");
   lines.forEach(line => {
     try {
+      
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData);
 
       if (typeof parsedData.type === 'undefined' || parsedData.type !== 'NEW_BEST_LAP') {
-        throw 'not a NEW_BEST_LAP';
+        throw new Error('not a NEW_BEST_LAP');
       }
+
+      if (reportedGames.has(parsedData.game.seed)) {
+        throw new Error('already reported');
+      }
+
+      reportedGames.set(parsedData.game.seed, true);
 
       postToTelegram(
         `*${parsedData.game.player}* just set a new record in CryptoRun: *${formatTime(parsedData.game.lapTime * .001)}*\n\nPlay now at: https://blockarca.de/cryptorun (coming soon)`
       );
 
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   });
 };
