@@ -35,6 +35,7 @@ const userdb = level("userdb");
 const activedb = level("activedb");
 const watchWAX = require('./watchWAX');
 const waitForCRRequests = require('./waitForCRRequests');
+const renderWAXLeaderboard = require('./waxLeaderboard');
 
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
@@ -257,6 +258,15 @@ const postQRTickets = async () => {
   postImage(
     "./qr.png",
     "Play now at: https://blockarca.de/qr"
+  );
+};
+
+const postWAXLeaderboard = async () => {
+  await renderWAXLeaderboard();
+
+  postImage(
+    "./wax.png",
+    "Play now at: https://wax.blockarca.de"
   );
 };
 
@@ -939,6 +949,10 @@ const processMessages = data => {
         case "/qr":
           deleteMessage("@blockarcade", line.message.message_id);
           postQRTickets();
+          break;
+        case "/waxleaderboard":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postWAXLeaderboard();
           break;
         case "/winners":
           postLeaderboardWinners();

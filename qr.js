@@ -14,6 +14,4 @@ const renderQR = async () => {
   await browser.close();
 };
 
-renderQR();
-
 module.exports = renderQR;
