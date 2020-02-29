@@ -26,24 +26,29 @@ const processCRData = data => {
   const lines = data.toString("utf8").split("\n");
   lines.forEach(line => {
     try {
-      
+
       const parsedLine = JSON.parse(line);
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData);
 
-      if (typeof parsedData.type === 'undefined' || parsedData.type !== 'NEW_BEST_LAP') {
+      if (typeof parsedData.type === 'undefined' || (parsedData.type !== 'NEW_BEST_LAP' && parsedData.type !== 'NEW_COURSE')) {
         throw new Error('not a NEW_BEST_LAP');
       }
 
-      if (reportedGames.has(parsedData.game.seed)) {
+      if (reportedGames.has(parsedData.id)) {
         throw new Error('already reported');
       }
 
-      reportedGames.set(parsedData.game.seed, true);
-
-      postToTelegram(
-        `*${parsedData.game.player}* just set a new record in CryptoRun: *${formatTime(parsedData.game.lapTime * .001)}*\n\nPlay now at: https://blockarca.de/cryptorun (coming soon)`
-      );
+      reportedGames.set(parsedData.id, true);
+      if (parsedData.type === 'NEW_BEST_LAP') {
+        postToTelegram(
+          `*${parsedData.game.player}* just set a new record in CryptoRun: *${formatTime(parsedData.game.lapTime * .001)}*\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
+        );
+      } else if (parsedData.type === 'NEW_COURSE') {
+        postToTelegram(
+          `🏎🏎 New race course in CryptoRun: *${parsedData.course}* 🏎🏎\nThe leaderboard has been reset!\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
+        );
+      }
 
     } catch (e) {
       console.log(e);
