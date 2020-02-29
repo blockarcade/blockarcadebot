@@ -46,7 +46,7 @@ const processCRData = data => {
         );
       } else if (parsedData.type === 'NEW_COURSE') {
         postToTelegram(
-          `🏎🏎 New race course in CryptoRun: *${parsedData.course}* 🏎🏎\nThe leaderboard has been reset!\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
+          `🏁 New race course in CryptoRun 🏁\n                  *${parsedData.course}*🏁\n\nThe leaderboard has been reset!\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
         );
       }
 
