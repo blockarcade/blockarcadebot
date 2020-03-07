@@ -468,7 +468,7 @@ const postRegisteredUsers = async () => {
         {
           id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
           key: 'issuedTIX',
-          key: airdropped.get(key),
+          field: airdropped.get(key),
           by_longest_chain: true,
         },
         (_, response) => {
@@ -863,32 +863,26 @@ const processMessages = data => {
               );
             } else {
               const airdropped = await getUsers();
-              const lasttime = await new Promise((resolve) => {
+              const leaderboard = await new Promise((resolve) => {
                 iostPOSTRequest(
                   "/getContractStorage",
                   {
-                    id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
-                    key: `lasttime_${airdropped.get(`@${line.message.from.username}`)}`,
+                    id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
+                    key: 'issuedTIX',
+                    field: airdropped.get(`@${line.message.from.username}`),
                     by_longest_chain: true,
                   },
                   (_, response) => {
                     resolve(JSON.parse(response).data);
                   });
-              });
+              })
+              let issued = false;
 
-              const current = new Date().getTime();
-
-              const timestamp = Math.ceil(lasttime * 0.000001);
-              const since = current - timestamp;
-              const week = 604800000;
-
-              let decay = Math.floor(since / week) * 1000;
-
-              if (lasttime === 'null') {
-                decay = 100;
+              if (leaderboard !== 'null') {
+                issued = true;
               }
 
-              if (decay > 0) {
+              if (!issued) {
                 postToTelegram(
                   `You need to play a game this week to be included ${line.message.from.username}!`,
                   undefined,
