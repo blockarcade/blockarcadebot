@@ -466,7 +466,7 @@ const postRegisteredUsers = async () => {
       iostPOSTRequest(
         "/getContractStorage",
         {
-          id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
+          id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
           key: 'issuedTIX',
           key: airdropped.get(key),
           by_longest_chain: true,
@@ -482,8 +482,6 @@ const postRegisteredUsers = async () => {
     
     return null;
   }));
-
-  console.log(newKeys);
 
   const filteredKeys = newKeys.filter(el => el != null);
 
