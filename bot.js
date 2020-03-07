@@ -462,12 +462,13 @@ const postRegisteredUsers = async () => {
 
   // Filter out users that haven't played.
   newKeys = await Promise.all(newKeys.map(async (key) => {
-    const lasttime = await new Promise((resolve) => {
+    const leaderboard = await new Promise((resolve) => {
       iostPOSTRequest(
         "/getContractStorage",
         {
           id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
-          key: `lasttime_${airdropped.get(key)}`,
+          key: 'issuedTIX',
+          key: airdropped.get(key),
           by_longest_chain: true,
         },
         (_, response) => {
@@ -475,17 +476,10 @@ const postRegisteredUsers = async () => {
         });
     });
 
-    const current = new Date().getTime();
-
-    const timestamp = Math.ceil(lasttime * 0.000001);
-    const since = current - timestamp;
-    const week = 604800000;
-
-    const decay = Math.floor(since / week) * 1000;
-    if (decay < 1) {
+    if (leaderboard !== 'null') {
       return key;
     }
-
+    
     return null;
   }));
 
@@ -494,7 +488,7 @@ const postRegisteredUsers = async () => {
   const filteredKeys = newKeys.filter(el => el != null);
 
   postToTelegram(
-    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\nNo airdrop planned.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play at least 1 StackWave game.`,
+    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n50,000 $TIX airdrop happening on March 21st.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play any BlockArcade game that pays $TIX.`,
     undefined,
     true
   );
