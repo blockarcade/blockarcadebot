@@ -10,6 +10,17 @@ const renderGlobalLeaderboard = async () => {
 
   await page.waitForSelector('#table');
 
+  await page.evaluate(async () => {
+    const selectors = Array.from(document.querySelectorAll("img"));
+    await Promise.all(selectors.map(img => {
+      if (img.complete) return;
+      return new Promise((resolve, reject) => {
+        img.addEventListener('load', resolve);
+        img.addEventListener('error', reject);
+      });
+    }));
+  })
+
   await screenshotDOMElement(page, {
     path: 'global.png',
     selector: '#widget',
