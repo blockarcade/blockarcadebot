@@ -37,6 +37,7 @@ const watchWAX = require('./watchWAX');
 const waitForCRRequests = require('./waitForCRRequests');
 const renderWAXLeaderboard = require('./waxLeaderboard');
 const renderGlobalLeaderboard = require('./globalLeaderboard');
+const renderVIPLeaderboard = require('./vipLeaderboard');
 
 const welcomeText = `👋 *Welcome to BlockArcade!*
 
@@ -277,6 +278,15 @@ const postGlobalLeaderboard = async () => {
   postImage(
     "./global.png",
     "Play now at: https://blockarca.de"
+  );
+};
+
+const postVIPLeaderboard = async () => {
+  await renderVIPLeaderboard();
+
+  postImage(
+    "./vip.png",
+    "Stake now at: https://blockarca.de/vip"
   );
 };
 
@@ -953,6 +963,10 @@ const processMessages = data => {
         case "/globalleaderboard":
           deleteMessage("@blockarcade", line.message.message_id);
           postGlobalLeaderboard();
+          break;
+        case "/vip":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postVIPLeaderboard();
           break;
         case "/winners":
           postLeaderboardWinners();
