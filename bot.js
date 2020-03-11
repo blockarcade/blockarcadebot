@@ -489,7 +489,7 @@ const postRegisteredUsers = async () => {
     if (leaderboard !== 'null') {
       return key;
     }
-    
+
     return null;
   }));
 
@@ -502,18 +502,16 @@ const postRegisteredUsers = async () => {
   );
 };
 
-const postTixPriceToTelegram = () => {
-  iostPOSTRequest(
-    "/getContractStorage",
-    { "id": "ContractBqYBBN1JuvvcmbaWkbSv6Pa334UJinM9vTPWPC2hvUDL", "key": "price", "field": "tix", "by_longest_chain": true },
-    (_, response) => {
-      const currentPrice = JSON.parse(response).data;
-      postToTelegram(
-        `Current $TIX Price: *${currentPrice} IOST*\nTrade now at: https://www.iostdex.io`,
-        undefined,
-        true
-      );
-    });
+const postTixPriceToTelegram = async () => {
+  const response = await fetch('https://otbtrade.com/api/getRecentPrice/tix');
+  const currentPrice = Number(await response.json()).toFixed(4);
+
+  postToTelegram(
+    `Current $TIX Price: *${currentPrice} IOST*\nTrade now at otbTRADE: https://otbtrade.com/iost-exchange/tix`,
+    undefined,
+    true
+  );
+
 };
 
 const postJackpotToTelegram = async () => {
@@ -1136,7 +1134,7 @@ const waitForWAXRequests = async () => {
   await watchWAX();
   setTimeout(waitForWAXRequests, 1000);
 }
- 
+
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
 waitForQRRequests();
