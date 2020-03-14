@@ -42,11 +42,11 @@ const processCRData = data => {
       reportedGames.set(parsedData.id, true);
       if (parsedData.type === 'NEW_BEST_LAP') {
         postToTelegram(
-          `*${parsedData.game.player}* just set a new record in CryptoRun: *${formatTime(parsedData.game.lapTime * .001)}*\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
+          `*${parsedData.game.player}* just set a new record in the ${parsedData.game.mode} CryptoRun race: *${formatTime(parsedData.game.lapTime * .001)}*\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
         );
       } else if (parsedData.type === 'NEW_COURSE') {
         postToTelegram(
-          `🏁 New race course in CryptoRun 🏁\n\n                  *${parsedData.course}*\n\nThe leaderboard has been reset!\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
+          `🏁 New race course in the ${parsedData.mode} CryptoRun race 🏁\n\n                  *${parsedData.course}*\n\nThe leaderboard has been reset!\n\nRace now at: https://blockarca.de/cryptorun (coming soon)`
         );
       }
 
