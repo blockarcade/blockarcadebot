@@ -973,16 +973,6 @@ const processMessages = data => {
           console.log("unreconized command", command);
       }
 
-      changes.forEach((change, user) => {
-        console.log(user, change);
-        postToTelegram(
-          `Thanks for signing up @${user}! Your IOST account is registered and we deleted your message.`,
-          changes.room,
-          false
-        );
-        userdb.put(user, JSON.stringify({ iostAccount: change.username }));
-      });
-
 
       changes.forEach((change, user) => {
         console.log(user, change);
