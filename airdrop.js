@@ -13,7 +13,7 @@ const activedb = level('activedb');
 
 const userdb = level('userdb');
 
-const airdropAmount = 150000;
+const airdropAmount = 50000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
@@ -64,12 +64,13 @@ userdb.createReadStream()
     );
 
     newKeys = await Promise.all(newKeys.map(async (key) => {
-      const lasttime = await new Promise((resolve) => {
+      const leaderboard = await new Promise((resolve) => {
         iostPOSTRequest(
           "/getContractStorage",
           {
-            id: "ContractEnn4aBKJKwqQCsQiqFYovWWqm6vnA6xV1tT1YH5jKKpt",
-            key: `lasttime_${airdropped.get(key)}`,
+            id: "Contract6sCJp6jz2cpUKVpV6utA1qP5BxFpHNYCYxC6VAMpkCq5",
+            key: 'issuedTIX',
+            field: airdropped.get(key),
             by_longest_chain: true,
           },
           (_, response) => {
@@ -77,20 +78,12 @@ userdb.createReadStream()
           });
       });
   
-      const current = new Date().getTime();
-  
-      const timestamp = Math.ceil(lasttime * 0.000001);
-      const since = current - timestamp;
-      const week = 604800000;
-  
-      const decay = Math.floor(since / week) * 1000;
-      if (decay < 1) {
+      if (leaderboard !== 'null') {
         return key;
       }
   
       return null;
     }));
-
 
     const filteredKeys = newKeys.filter(el => el != null);
     const dropAmount = Math.floor(airdropAmount / filteredKeys.length);
