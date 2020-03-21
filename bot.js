@@ -881,7 +881,10 @@ const processMessages = data => {
               );
             } else {
               const airdropped = await getUsers();
-              const leaderboard = await new Promise((resolve) => {
+              let leaderboard;
+              
+              try {
+              leaderboard = await new Promise((resolve) => {
                 iostPOSTRequest(
                   "/getContractStorage",
                   {
@@ -894,6 +897,14 @@ const processMessages = data => {
                     resolve(JSON.parse(response).data);
                   });
               })
+              } catch (e) {
+                postToTelegram(
+                  `Error processing request, I'm a bad robot 🤕`,
+                  undefined,
+                  false,
+                  line.message.message_id
+                );
+              }
               let issued = false;
 
               if (leaderboard !== 'null') {
