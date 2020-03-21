@@ -22,6 +22,10 @@ async function main() {
       action_trace: (message) => {
         const parsedData = message.data.trace.act.data;
 
+        if (parsedData.status !== 'jackpotWin') {
+          return;
+        }
+
         postToTelegram(
           `*${parsedData.nm}* just went for the *jackpot* and won\n*
             ${parsedData.paid * 0.00000001} WTIX*\n\nCongratulations ${parsedData.nm}!`
