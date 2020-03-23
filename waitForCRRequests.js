@@ -82,7 +82,6 @@ const waitForCRRequests = callback => {
 
   req.on("error", error => {
     console.error(error);
-    callback();
   });
 
   req.write(crData);

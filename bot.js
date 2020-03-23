@@ -1071,7 +1071,6 @@ const waitForRequests = callback => {
 
   req.on("error", error => {
     console.error(error);
-    callback();
   });
 
   req.write(data);
@@ -1104,7 +1103,7 @@ const waitForQRRequests = callback => {
 
   req.on("error", error => {
     console.error(error);
-    callback();
+    // callback();
   });
 
   req.write(qrData);
