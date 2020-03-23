@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require('http');
 const {
   postToTelegram,
 } = require('./telegram');
@@ -58,8 +58,8 @@ const processCRData = data => {
 
 const waitForCRRequests = callback => {
   const options = {
-    hostname: "api.iost.io",
-    port: 443,
+    hostname: "159.89.128.94",
+    port: 30001,
     path: "/subscribe",
     method: "POST",
     headers: {
@@ -82,6 +82,7 @@ const waitForCRRequests = callback => {
 
   req.on("error", error => {
     console.error(error);
+    setTimeout(waitForCRRequests, 1000);
   });
 
   req.write(crData);
