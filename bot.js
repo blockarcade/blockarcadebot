@@ -1147,7 +1147,7 @@ const waitForBotMessage = () => {
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
 waitForQRRequests();
-watchWAX();
+// watchWAX();
 waitForCRRequests();
 waitForBotMessage();
 
