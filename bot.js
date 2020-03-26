@@ -1144,15 +1144,10 @@ const waitForBotMessage = () => {
 };
 
 
-const waitForWAXRequests = async () => {
-  await watchWAX();
-  setTimeout(waitForWAXRequests, 1000);
-}
-
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
 waitForQRRequests();
-waitForWAXRequests();
+watchWAX();
 waitForCRRequests();
 waitForBotMessage();
 
