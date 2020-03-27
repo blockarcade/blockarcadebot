@@ -1,4 +1,5 @@
 const https = require('https');
+const http = require('http');
 const Table = require('cli-table');
 const stripAnsi = require('strip-ansi');
 const {
@@ -1047,8 +1048,8 @@ const processMessages = data => {
 
 const waitForRequests = callback => {
   const options = {
-    hostname: "api.iost.io",
-    port: 443,
+    hostname: '159.89.128.94',
+    port: 30001,
     path: "/subscribe",
     method: "POST",
     headers: {
@@ -1057,7 +1058,7 @@ const waitForRequests = callback => {
     },
   };
 
-  const req = https.request(options, res => {
+  const req = http.request(options, res => {
     let data = "";
     res.on("data", d => {
       data += d;
@@ -1079,8 +1080,8 @@ const waitForRequests = callback => {
 
 const waitForQRRequests = callback => {
   const options = {
-    hostname: "api.iost.io",
-    port: 443,
+    hostname: '159.89.128.94',
+    port: 30001,
     path: "/subscribe",
     method: "POST",
     headers: {
@@ -1089,7 +1090,7 @@ const waitForQRRequests = callback => {
     },
   };
 
-  const req = https.request(options, res => {
+  const req = http.request(options, res => {
     let temp = "";
     res.on("data", d => {
       temp += d;

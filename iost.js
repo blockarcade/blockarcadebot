@@ -1,13 +1,15 @@
 const https = require('https');
+const http = require('http');
+
 const iostRequest = (endpoint, callback) => {
   const options = {
-    hostname: 'api.iost.io',
-    port: 443,
+    hostname: '159.89.128.94',
+    port: 30001,
     path: endpoint,
     method: 'GET'
   }
 
-  const req = https.request(options, (res) => {
+  const req = http.request(options, (res) => {
     let body = '';
     res.on('data', (d) => {
       body += d;
@@ -29,13 +31,13 @@ const iostPOSTRequest = (endpoint, data, callback) => {
   const stringData = JSON.stringify(data);
 
   const options = {
-    hostname: 'api.iost.io',
-    port: 443,
+    hostname: '159.89.128.94',
+    port: 30001,
     method: 'POST',
     path: endpoint,
   };
 
-  const req = https.request(options, (res) => {
+  const req = http.request(options, (res) => {
     let body = '';
     res.on('data', (d) => {
       body += d;
