@@ -39,6 +39,7 @@ const waitForCRRequests = require('./waitForCRRequests');
 const renderWAXLeaderboard = require('./waxLeaderboard');
 const renderGlobalLeaderboard = require('./globalLeaderboard');
 const renderVIPLeaderboard = require('./vipLeaderboard');
+const renderVIPTotal = require('./vipTotal');
 const renderCRLeaderboard = require('./crLeaderboard');
 
 const welcomeText = `👋 *Welcome to BlockArcade!*
@@ -288,6 +289,15 @@ const postVIPLeaderboard = async () => {
 
   postImage(
     "./vip.png",
+    "Stake now at: https://blockarca.de/vip"
+  );
+};
+
+const postVIPTotal = async () => {
+  await renderVIPTotal();
+
+  postImage(
+    "./viptotal.png",
     "Stake now at: https://blockarca.de/vip"
   );
 };
@@ -700,9 +710,9 @@ const postWAXInstructionsToTelegram = user => {
     false
   );
 
-  // setTimeout(() => {
-  //   postToTelegram('/iost YOUR IOST ACCOUNT');
-  // }, 1000);
+  setTimeout(() => {
+    postToTelegram('/iost YOUR IOST ACCOUNT');
+  }, 1000);
 };
 
 const postDappRanking = async () => {
@@ -987,6 +997,10 @@ const processMessages = data => {
         case "/vip":
           deleteMessage("@blockarcade", line.message.message_id);
           postVIPLeaderboard();
+          break;
+        case "/viptotal":
+          deleteMessage("@blockarcade", line.message.message_id);
+          postVIPTotal();
           break;
         case "/cr":
           deleteMessage("@blockarcade", line.message.message_id);
