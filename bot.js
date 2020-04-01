@@ -298,7 +298,7 @@ const postVIPTotal = async () => {
 
   postImage(
     "./viptotal.png",
-    "Stake now at: [BlockArca.de/VIP](https://blockarca.de/vip)"
+    "Stake now at: https://blockarca.de/vip"
   );
 };
 
