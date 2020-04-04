@@ -13,7 +13,7 @@ const activedb = level('activedb');
 
 const userdb = level('userdb');
 
-const airdropAmount = 50000;
+const airdropAmount = 10000;
 const airdropped = new Map();
 userdb.createReadStream()
   .on('data', function (data) {
