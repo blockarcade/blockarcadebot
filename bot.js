@@ -224,7 +224,7 @@ const postTopJPT = async () => {
 
   let result = [];
 
-  Object.keys(users).filter(user => ['octalmage', 'bac0n', 'official', 'blockarcade'].indexOf(user) === -1).forEach(user => {
+  Object.keys(users).filter(user => ['octalmage', 'bac0n', 'official', 'blockarcade', 'taryn'].indexOf(user) === -1).forEach(user => {
     result.push({
       user: user,
       amount: users[user],
