@@ -517,7 +517,7 @@ const postRegisteredUsers = async () => {
   const filteredKeys = newKeys.filter(el => el != null);
 
   postToTelegram(
-    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n10,000 $TIX airdrop happening on April 12th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play any BlockArcade game that pays $TIX.`,
+    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n25,000 $TIX airdrop happening on April 27th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play any BlockArcade game that pays $TIX.`,
     undefined,
     true
   );
@@ -1161,8 +1161,8 @@ const waitForBotMessage = () => {
 
 // Send waitForRequests as the callback causing a loop.
 waitForRequests();
-waitForQRRequests();
-// watchWAX();
+// waitForQRRequests();
+watchWAX();
 waitForCRRequests();
 waitForBotMessage();
 
