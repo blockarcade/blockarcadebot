@@ -1151,7 +1151,6 @@ const waitForBotMessage = () => {
 
   req.on("error", error => {
     console.error(error);
-    callback();
   });
 
   req.write(data);
