@@ -52,7 +52,7 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
     [Prize Exchange](https://blockarca.de/exchange)
     [Twitter](https://twitter.com/playblockarcade)
-    [DEX](https://iostdex.io)
+    [DEX](https://otbtrade.com/exchange/iost/tix)
 
 *IOST Wallets*
     [Jetstream (Desktop)](https://chrome.google.com/webstore/detail/jetstream/ijancdlmlahmfgcimhocmpibadokcdfc)
@@ -528,7 +528,7 @@ const postTixPriceToTelegram = async () => {
   const currentPrice = Number(await response.json()).toFixed(4);
 
   postToTelegram(
-    `Current $TIX Price: *${currentPrice} IOST*\nTrade now at otbTRADE: https://otbtrade.com/iost-exchange/tix`,
+    `Current $TIX Price: *${currentPrice} IOST*\nTrade now at otbTRADE: https://otbtrade.com/exchange/iost/tix`,
     undefined,
     true
   );
