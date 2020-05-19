@@ -52,7 +52,8 @@ Our goal with BlockArcade is to emulate the traditional arcade experience, just 
     [Whitepaper](https://blockarcade.github.io/whitepaper/whitepaper.pdf)
     [Prize Exchange](https://blockarca.de/exchange)
     [Twitter](https://twitter.com/playblockarcade)
-    [DEX](https://otbtrade.com/exchange/iost/tix)
+    [IOST DEX](https://otbtrade.com/exchange/iost/tix)
+    [WAX DEX](https://wax.alcor.exchange/markets/WTIX-wtixtokenblo)
 
 *IOST Wallets*
     [Jetstream (Desktop)](https://chrome.google.com/webstore/detail/jetstream/ijancdlmlahmfgcimhocmpibadokcdfc)
@@ -527,12 +528,18 @@ const postTixPriceToTelegram = async () => {
   const response = await fetch('https://otbtrade.com/api/getRecentPrice/tix');
   const currentPrice = Number(await response.json()).toFixed(4);
 
+  const wtixResponse = await fetch('https://wax.alcor.exchange/api/markets');
+  const wtixJSONResponse = await wtixResponse.json();
+  const wtixToken = wtixJSONResponse.find(token => token.id === 1);
+  const wtixPrice = wtixToken.last_price * 0.00000001;
+
   postToTelegram(
-    `Current $TIX Price: *${currentPrice} IOST*\nTrade now at otbTRADE: https://otbtrade.com/exchange/iost/tix`,
+    `Current $TIX Price: *${currentPrice} IOST*\nTrade now at otbTRADE: https://otbtrade.com/exchange/iost/tix
+  
+Current $WTIX Price: *${wtixPrice} WAX*\nTrade now at Alcor Exchange: https://wax.alcor.exchange/markets/WTIX-wtixtokenblo`,
     undefined,
     true
   );
-
 };
 
 const postJackpotToTelegram = async () => {
