@@ -518,7 +518,7 @@ const postRegisteredUsers = async () => {
   const filteredKeys = newKeys.filter(el => el != null);
 
   postToTelegram(
-    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\n25,000 $TIX airdrop happening on May 25th.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play any BlockArcade game that pays $TIX.`,
+    `There are *${filteredKeys.length}* $IOST accounts eligible for the next AIRDROP!\nNo airdrop planned.\n\nTo be eligible you need to be active in @blockarcade a week before the airdrop and play any BlockArcade game that pays $TIX.`,
     undefined,
     true
   );
