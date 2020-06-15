@@ -777,9 +777,10 @@ const processQRData = data => {
       const parsedData = JSON.parse(parsedLine.result.event.data);
       console.log(parsedData);
 
-      if (typeof parsedData.player === 'undefined') {
-        throw 'not a raffle';
+      if (typeof parsedData.player === 'undefined' || typeof parsedData.amount === 'object') {
+        throw new Error('not a raffle');
       }
+      
       postToTelegram(
         `*${parsedData.player}* just won *${parsedData.amount} $TIX* from the ${parsedData.raffle} Quantum Raffle!\n\nPlay now at: https://blockarca.de/qr`
       );
